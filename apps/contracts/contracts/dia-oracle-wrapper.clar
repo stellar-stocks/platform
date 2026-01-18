@@ -1,14 +1,19 @@
-;; dia-oracle-wrapper.clar
-(define-constant ERR-STALE-PRICE (err u500))
-(define-constant MAX-PRICE-AGE u300) ;; 5 minutes in seconds
+(define-map prices { symbol: (string-ascii 12) } uint)
+(define-map timestamps { symbol: (string-ascii 12) } uint)
 
-(define-read-only (get-stock-price (symbol (string-ascii 32)))
-    (let (
-        (price-data (unwrap! (contract-call? 'ST1S5ZGRZV5K4S9205RWPRTX9RGS9JV40KQMR4G1J.dia-oracle get-value symbol) (err u404)))
-        (current-time (unwrap-panic (get-block-info? time (- block-height u1))))
-    )
-        ;; Check if price is older than 5 minutes
-        (asserts! (< (- current-time (get timestamp price-data)) MAX-PRICE-AGE) ERR-STALE-PRICE)
-        (ok (get price price-data))
-    )
-)
+(define-public (set-price (symbol (string-ascii 12)) (price uint))
+  (begin
+    (map-set prices { symbol: symbol } price)
+    (map-set timestamps { symbol: symbol } (block-height))
+    (print { type: "oracle-update", symbol: symbol, price: price })
+    (ok true)))
+
+(define-read-only (get-latest-price (symbol (string-ascii 12)))
+  (default-to u0 (map-get? prices { symbol: symbol })))
+
+(define-read-only (is-stale (symbol (string-ascii 12)))
+  (let ((timestamp (default-to u0 (map-get? timestamps { symbol: symbol }))))
+   (< (- (block-height) timestamp) u3600)))
+
+(define-read-only (calc-liquidation-price (entry-price uint) (leverage uint))
+  (/ (* entry-price u110) leverage))

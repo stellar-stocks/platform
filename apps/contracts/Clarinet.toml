@@ -13,6 +13,16 @@ epoch = '3.2'
 [contracts.dia-oracle-wrapper]
 path = 'contracts/dia-oracle-wrapper.clar'
 clarity_version = 3
+epoch = '3.2'
+
+[contracts.funding-settler]
+path = 'contracts/funding-settler.clar'
+clarity_version = 3
+epoch = '3.2'
+
+[contracts.liquidation-engine]
+path = 'contracts/liquidation-engine.clar'
+clarity_version = 3
 epoch = 'latest'
 
 [contracts.perp-engine]

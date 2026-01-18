@@ -11,6 +11,7 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "dotenv-cli": "^11.0.0",
     "@hookform/resolvers": "^5.2.2",
     "@privy-io/react-auth": "^3.10.1",
     "@radix-ui/react-accordion": "^1.2.12",
