@@ -165,10 +165,9 @@ export default function Home() {
               {testnetAddress && <div>Testnet Address: {testnetAddress}</div>}
             </div>
           )}
-
           <button
             onClick={logout}
-            className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+            className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
           >
             Logout
           </button>
