@@ -1,0 +1,33 @@
+[project]
+name = 'contrarcts'
+description = ''
+authors = []
+telemetry = true
+cache_dir = '.\.cache'
+requirements = []
+[contracts.collateral-vault]
+path = 'contracts/collateral-vault.clar'
+clarity_version = 3
+epoch = '3.2'
+
+[contracts.dia-oracle-wrapper]
+path = 'contracts/dia-oracle-wrapper.clar'
+clarity_version = 3
+epoch = 'latest'
+
+[contracts.perp-engine]
+path = 'contracts/perp-engine.clar'
+clarity_version = 3
+epoch = '3.2'
+[repl.analysis]
+passes = ['check_checker']
+
+[repl.analysis.check_checker]
+strict = false
+trusted_sender = false
+trusted_caller = false
+callee_filter = false
+
+[repl.remote_data]
+enabled = false
+api_url = 'https://api.hiro.so'
