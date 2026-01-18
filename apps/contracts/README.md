@@ -45,10 +45,10 @@
 
 ## 🏗️ Architecture
 
-**Production Components (1,300 LOC):**
+**Production Components:**
 
-- **5 Atomic Clarity Contracts** - Engine + Vault + Oracle + Funding + Liquidation
-- **100% TypeScript Test Coverage** - 66 tests passing
+- **6 Atomic Clarity Contracts** - Engine + Vault + Oracle + Funding + Liquidation + Shared Traits
+- **100% TypeScript Test Coverage** - all tests passing
 - **DIA Oracle Integration** - Real AAPL/TSLA prices
 - **Alpaca Fractional Shares** - Real stock backing
 - **Full Audit-Ready** - Reentrancy safe, battle-tested logic
@@ -65,6 +65,7 @@ graph TD
         Oracle["🔮 dia-oracle-wrapper.clar<br/>(Price Safety)"]
         Liq["⚖️ liquidation-engine.clar<br/>(Margin Monitor)"]
         Funding["⏳ funding-settler.clar<br/>(Long/Short Rebalance)"]
+        Traits["🤝 traits.clar<br/>(Shared Interfaces)"]
     end
 
     subgraph "External Oracles & Data"
@@ -128,7 +129,8 @@ rustup install stable
 clarinet new perp-dex
 cd perp-dex
 
-# 2. Create 5 contracts
+# 2. Create 6 contracts
+clarinet contract new traits
 clarinet contract new collateral-vault
 clarinet contract new perp-engine
 clarinet contract new dia-oracle-wrapper
