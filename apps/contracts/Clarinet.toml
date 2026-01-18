@@ -5,6 +5,11 @@ authors = []
 telemetry = true
 cache_dir = '.\.cache'
 requirements = []
+[contracts.traits]
+path = 'contracts/traits.clar'
+clarity_version = 3
+epoch = '3.2'
+
 [contracts.collateral-vault]
 path = 'contracts/collateral-vault.clar'
 clarity_version = 3

@@ -1,21 +1,31 @@
-
 import { describe, expect, it } from "vitest";
+import { Cl } from "@stacks/transactions";
 
 const accounts = simnet.getAccounts();
-const address1 = accounts.get("wallet_1")!;
+const deployer = accounts.get("deployer")!;
 
-/*
-  The test below is an example. To learn more, read the testing documentation here:
-  https://docs.hiro.so/stacks/clarinet-js-sdk
-*/
-
-describe("example tests", () => {
-  it("ensures simnet is well initialised", () => {
-    expect(simnet.blockHeight).toBeDefined();
+describe("Funding Settler", () => {
+  it("should fail to settle funding too early", () => {
+    const response = simnet.callPublicFn(
+      "funding-settler",
+      "settle-funding",
+      [],
+      deployer,
+    );
+    // blocks-since = 0 (initially) < 2880
+    expect(response.result).toBeErr(Cl.int(300)); // err-too-early
   });
 
-  // it("shows an example", () => {
-  //   const { result } = simnet.callReadOnlyFn("counter", "get-counter", [], address1);
-  //   expect(result).toBeUint(0);
-  // });
+  it("should settle funding after interval", () => {
+    // Advance blocks
+    simnet.mineEmptyBlocks(2881);
+
+    const response = simnet.callPublicFn(
+      "funding-settler",
+      "settle-funding",
+      [],
+      deployer,
+    );
+    expect(response.result).toBeOk(Cl.bool(true));
+  });
 });

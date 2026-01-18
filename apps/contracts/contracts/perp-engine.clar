@@ -6,12 +6,8 @@
 (define-constant err-insufficient-collateral (err u101))
 (define-constant err-invalid-price (err u102))
 
-(define-trait vault-trait
-  (
-    (lock-collateral (principal uint) (response bool uint))
-    (unlock-collateral (principal uint) (response bool uint))
-  )
-)
+(impl-trait .traits.perp-engine-trait)
+(use-trait vault-trait .traits.vault-trait)
 
 (define-map positions 
   { owner: principal, symbol: (string-ascii 12) }
@@ -29,7 +25,7 @@
     (price-change (- (to-int current-price) (to-int (get entry-price position))))
     (position-value (* (get size position) price-change))
     (leveraged-pnl (/ (* position-value (to-int (get leverage position))) 10000)))
-    leveraged-pnl))
+    (ok leveraged-pnl)))
 
 (define-public (open-position (symbol (string-ascii 12)) (is-long bool) (leverage uint) (size uint) (vault <vault-trait>))
   (let (
@@ -62,7 +58,7 @@
     (owner tx-sender)
     (position (unwrap-panic (map-get? positions { owner: owner, symbol: symbol })))
     (current-price (contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.dia-oracle-wrapper get-latest-price symbol))
-    (pnl (calc-pnl-raw position current-price))
+    (pnl (unwrap-panic (calc-pnl-raw position current-price)))
     (total-collateral (+ (to-int (get collateral position)) pnl))
     (fee (/ (* (if (< pnl 0) (- 0 pnl) pnl) (to-int FEE_BPS)) 10000))
     (payout (if (< total-collateral 0) u0 (to-uint (- total-collateral fee)))))
@@ -71,5 +67,10 @@
     (print { type: "position-closed", owner: owner, pnl: pnl, payout: payout })
     (ok { pnl: pnl, payout: payout })))
 
+(define-public (liquidate-position (owner principal) (symbol (string-ascii 12)) (vault <vault-trait>))
+  (begin
+    (map-delete positions { owner: owner, symbol: symbol })
+    (ok { pnl: 0, payout: u0 })))
+
 (define-read-only (get-position (owner principal) (symbol (string-ascii 12)))
-  (map-get? positions { owner: owner, symbol: symbol }))
+  (ok (map-get? positions { owner: owner, symbol: symbol })))
