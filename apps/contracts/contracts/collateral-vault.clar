@@ -36,3 +36,4 @@
     (map-set vaults { owner: (as-contract tx-sender) } (- contract-balance amount))
     (var-set total-locked (- (var-get total-locked) amount))
     (ft-transfer? collateral-vault amount (as-contract tx-sender) owner)))
+    
