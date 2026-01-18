@@ -57,7 +57,19 @@ describe("Liquidation Engine", () => {
       deployer,
     );
 
-    // 4. Liquidate
+    // 4. Set Liquidator
+    const liquidatorEngine = Cl.contractPrincipal(
+      deployer,
+      "liquidation-engine",
+    );
+    simnet.callPublicFn(
+      "perp-engine",
+      "set-liquidator",
+      [liquidatorEngine, Cl.bool(true)],
+      deployer,
+    );
+
+    // 5. Liquidate
     const response = simnet.callPublicFn(
       "liquidation-engine",
       "liquidate",

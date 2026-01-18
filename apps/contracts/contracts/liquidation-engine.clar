@@ -16,8 +16,8 @@
                (to-int (* (to-uint abs-size) current-price)))))
     (asserts! (< health 1000) err-not-liquidatable)
     ;; Transfer 95% collateral to owner, 5% keeper penalty
-    (try! (contract-call? collateral-vault unlock-collateral owner 
-                         (/ (* (get collateral position) u95) u100)))
+    ;; (try! (contract-call? collateral-vault unlock-collateral owner 
+    ;;                      (/ (* (get collateral position) u95) u100)))
     (try! (contract-call? perp-engine liquidate-position owner symbol collateral-vault))
     (print { type: "liquidation", owner: owner, penalty: "5%" })
     (ok true)))

@@ -5,6 +5,16 @@
 (define-constant err-invalid-leverage (err u100))
 (define-constant err-insufficient-collateral (err u101))
 (define-constant err-invalid-price (err u102))
+(define-constant err-unauthorized (err u401))
+(define-constant err-healthy-position (err u402))
+
+(define-data-var governance principal tx-sender)
+(define-map whitelisted-liquidators principal bool)
+
+(define-public (set-liquidator (liquidator principal) (status bool))
+  (begin
+    (asserts! (is-eq tx-sender (var-get governance)) err-unauthorized)
+    (ok (map-set whitelisted-liquidators liquidator status))))
 
 (impl-trait .traits.perp-engine-trait)
 (use-trait vault-trait .traits.vault-trait)
@@ -68,9 +78,28 @@
     (ok { pnl: pnl, payout: payout })))
 
 (define-public (liquidate-position (owner principal) (symbol (string-ascii 12)) (vault <vault-trait>))
-  (begin
-    (map-delete positions { owner: owner, symbol: symbol })
-    (ok { pnl: 0, payout: u0 })))
+  (let (
+    (caller contract-caller)
+    (is-authorized (or (is-eq caller (var-get governance)) 
+                       (is-eq caller owner)
+                       (default-to false (map-get? whitelisted-liquidators caller)))))
+    (asserts! is-authorized err-unauthorized)
+    (let (
+      (position (unwrap-panic (map-get? positions { owner: owner, symbol: symbol })))
+      (current-price (contract-call? 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.dia-oracle-wrapper get-latest-price symbol))
+      (pnl (unwrap-panic (calc-pnl-raw position current-price)))
+      (collateral (get collateral position))
+      (size (get size position))
+      (abs-size (if (< size 0) (- 0 size) size))
+      (health (/ (* (+ (to-int collateral) pnl) 10000) (to-int (* (to-uint abs-size) current-price))))
+      (penalty (/ (* collateral u5) u100))
+      (payout (- collateral penalty)))
+      (asserts! (< health 1000) err-healthy-position)
+      (try! (contract-call? vault unlock-collateral owner payout))
+      (try! (contract-call? vault unlock-collateral caller penalty))
+      (map-delete positions { owner: owner, symbol: symbol })
+      (print { type: "liquidation", owner: owner, liquidator: caller, pnl: pnl, payout: payout, penalty: penalty })
+      (ok { pnl: pnl, payout: payout }))))
 
 (define-read-only (get-position (owner principal) (symbol (string-ascii 12)))
   (ok (map-get? positions { owner: owner, symbol: symbol })))

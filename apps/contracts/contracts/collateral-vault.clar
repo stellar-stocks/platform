@@ -21,8 +21,7 @@
 
 (define-public (transfer (amount uint) (sender principal) (recipient principal) (memo (optional (buff 34))))
   (begin
-    (asserts! (or (is-eq tx-sender contract-owner) 
-                  (is-eq tx-sender sender)) err-unauthorized)
+    (asserts! (is-eq tx-sender sender) err-unauthorized)
     (try! (ft-transfer? collateral-vault amount sender recipient))
     (print { type: "transfer", sender: sender, recipient: recipient, amount: amount, memo: memo })
     (ok true)))
