@@ -53,22 +53,6 @@
 - **Alpaca Fractional Shares** - Real stock backing
 - **Full Audit-Ready** - Reentrancy safe, battle-tested logic
 
----
-
-## 🚀 Features
-
-| Feature              | Status  | Description                 |
-| :------------------- | :------ | :-------------------------- |
-| **20x Leverage**     | ✅ Live | 110% maintenance margin     |
-| **USDCx Native**     | ✅ Live | Circle xReserve bridge      |
-| **DIA Oracle**       | ✅ Live | AAPL/TSLA real-time pricing |
-| **8hr Funding**      | ✅ Live | Longs ↔ shorts settlement   |
-| **Auto-Liquidation** | ✅ Live | 5% keeper rewards           |
-| **SIP-010 Token**    | ✅ Live | Collateral vault standard   |
-| **Test Coverage**    | ✅ 100% | 66 TypeScript tests         |
-
----
-
 ```mermaid
 graph TD
     subgraph "User Layer"
@@ -109,6 +93,20 @@ graph TD
     style Trader fill:#6cf,stroke:#333
     style Alpaca fill:#dfd,stroke:#333
 ```
+
+---
+
+## 🚀 Features
+
+| Feature              | Status  | Description                 |
+| :------------------- | :------ | :-------------------------- |
+| **20x Leverage**     | ✅ Live | 110% maintenance margin     |
+| **USDCx Native**     | ✅ Live | Circle xReserve bridge      |
+| **DIA Oracle**       | ✅ Live | AAPL/TSLA real-time pricing |
+| **8hr Funding**      | ✅ Live | Longs ↔ shorts settlement   |
+| **Auto-Liquidation** | ✅ Live | 5% keeper rewards           |
+| **SIP-010 Token**    | ✅ Live | Collateral vault standard   |
+| **Test Coverage**    | ✅ 100% | 66 TypeScript tests         |
 
 ---
 
