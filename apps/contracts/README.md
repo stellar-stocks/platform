@@ -107,7 +107,6 @@ graph TD
 | **8hr Funding**      | ✅ Live | Longs ↔ shorts settlement   |
 | **Auto-Liquidation** | ✅ Live | 5% keeper rewards           |
 | **SIP-010 Token**    | ✅ Live | Collateral vault standard   |
-| **Test Coverage**    | ✅ 100% | 66 TypeScript tests         |
 
 ---
 

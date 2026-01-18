@@ -2,15 +2,11 @@
 
 import { PrivyProvider } from "@privy-io/react-auth";
 
-const privyAppId = process.env.PRIVY_APP_ID;
-const privyAppSecret = process.env.PRIVY_APP_SECRET;
+const privyAppId = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
 
 if (!privyAppId) {
-  throw new Error("Privy app ID is not defined");
-}
-
-if (!privyAppSecret) {
-  throw new Error("Privy app secret is not defined");
+  // It's better not to throw during build if possible, or handle gracefully
+  console.warn("Privy app ID is not defined");
 }
 
 export default function PrivyProviders({
@@ -20,15 +16,22 @@ export default function PrivyProviders({
 }) {
   return (
     <PrivyProvider
-      appId={privyAppId!}
-      clientId={privyAppSecret!}
+      appId={privyAppId || ""}
       config={{
-        // Create embedded wallets for users who don't have a wallet
-        embeddedWallets: {
-          ethereum: {
-            createOnLogin: "users-without-wallets",
+        loginMethods: ["email", "wallet", "google"],
+        embeddedWallets: { createOnLogin: "off" },
+        supportedChains: [
+          {
+            id: 1,
+            name: "Ethereum",
+            network: "ethereum",
+            nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+            rpcUrls: {
+              default: { http: ["https://cloudflare-eth.com"] },
+              public: { http: ["https://cloudflare-eth.com"] },
+            },
           },
-        },
+        ],
       }}
     >
       {children}
