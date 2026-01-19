@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { Input } from "./ui/input";
+import { Search } from "lucide-react";
 
 interface SidebarProps {
   onSelectSymbol: (symbol: string) => void;
@@ -86,25 +88,15 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelectSymbol, activeSymbol }) => {
     <aside className="w-[280px] hidden md:flex flex-col border-r border-[#1e2329] bg-[#0b0e11]">
       <div className="p-4">
         <div className="relative group">
-          <input
+          <Input
             type="text"
             placeholder="Search markets"
             className="w-full bg-[#1e2329] border border-[#2b2f36] group-focus-within:border-[#5e6673] rounded-xl px-9 py-2 text-[13px] outline-none placeholder-[#474d57] transition-all text-white"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <span className="absolute left-3 top-2.5 text-[#474d57]">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
+          <span className="absolute left-1.5 top-1.5 text-[#474d57]">
+            <Search />
           </span>
         </div>
       </div>

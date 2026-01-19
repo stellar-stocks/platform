@@ -10,12 +10,7 @@ import BottomTabs from "@/components/bottom-tabs";
 import AssetHeader from "@/components/asset-header";
 import { MarketDrawer } from "@/components/market-drawer";
 import { MobileOrderDrawer } from "@/components/mobile-order-drawer";
-
-const TVChartContainer = dynamic(
-  () =>
-    import("@/components/TVChartContainer").then((mod) => mod.TVChartContainer),
-  { ssr: false },
-);
+import TradingViewChart from "@/components/trading-view-chart";
 
 const App: React.FC = () => {
   const [selectedSymbol, setSelectedSymbol] = useState("NASDAQ:AAPL");
@@ -187,7 +182,7 @@ const App: React.FC = () => {
         <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
           <div className="flex-1 relative">
             <div style={{ width: "100%", height: "400px" }}>
-              <TVChartContainer symbol={selectedSymbol} />
+              <TradingViewChart symbol={selectedSymbol} />
             </div>
           </div>
 
@@ -278,7 +273,7 @@ const App: React.FC = () => {
           <div className="flex-1 flex flex-col min-h-0 relative">
             <div className="flex-1 border-b border-[#2b2f36] relative z-0">
               <div style={{ width: "100%", height: "400px" }}>
-                <TVChartContainer symbol={selectedSymbol} />
+                <TradingViewChart symbol={selectedSymbol} />
               </div>
             </div>
             <div

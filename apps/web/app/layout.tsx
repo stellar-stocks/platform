@@ -25,12 +25,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <Script
-          src="/static/charting_library/charting_library.js"
-          strategy="beforeInteractive"
-        />
-      </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <PrivyProviders>{children}</PrivyProviders>
       </body>

@@ -64,15 +64,19 @@ export function ConnectButton({ disabled }: { disabled?: boolean }) {
   }
 
   return (
-    <div className="flex flex-col items-center gap-2 w-full max-w-md">
+    <div className="flex items-center gap-2 w-full max-w-md">
+      {/* only show first 6 and last 4 characters */}
+      <Button
+        variant={"ghost"}
+      >{`${testnetAddress?.slice(0, 6)}...${testnetAddress?.slice(-4)}`}</Button>
       <Button
         onClick={logout}
-        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 w-full"
+        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
         disabled={disabled}
       >
         Disconnect
       </Button>
-      {isCreating && (
+      {/* {isCreating && (
         <div className="w-full bg-blue-100 text-blue-700 p-2 rounded text-sm text-center">
           Creating wallet...
         </div>
@@ -94,7 +98,7 @@ export function ConnectButton({ disabled }: { disabled?: boolean }) {
           {mainnetAddress && <div>Mainnet Address: {mainnetAddress}</div>}
           {testnetAddress && <div>Testnet Address: {testnetAddress}</div>}
         </div>
-      )}
+      )} */}
     </div>
   );
 }
