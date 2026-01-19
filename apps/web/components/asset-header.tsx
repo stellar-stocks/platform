@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { ConnectButton } from "./connect-button";
 
 interface AssetHeaderProps {
   symbol: string;
@@ -69,8 +70,8 @@ const AssetHeader: React.FC<AssetHeaderProps> = ({ symbol }) => {
         </div>
       </div>
 
-      <div className="hidden md:flex items-center gap-6">
-        <div className="flex flex-col items-end">
+      <div className="flex items-center gap-4">
+        <div className="hidden md:flex flex-col items-end mr-4">
           <span className="text-[10px] text-[#848e9c] uppercase font-bold tracking-wider mb-0.5">
             System
           </span>
@@ -79,19 +80,7 @@ const AssetHeader: React.FC<AssetHeaderProps> = ({ symbol }) => {
             OPERATIONAL
           </span>
         </div>
-        <button className="text-[#848e9c] p-2 hover:bg-[#1e2329] rounded-lg transition-all">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <path d="M12 16v-4M12 8h.01" />
-          </svg>
-        </button>
+        <ConnectButton />
       </div>
     </div>
   );
