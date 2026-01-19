@@ -3,13 +3,19 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
-import TradingViewChart from "@/components/trading-view-chart";
+import dynamic from "next/dynamic";
 import OrderPanel from "@/components/order-panel";
 import TradeHistory from "@/components/trading-history";
 import BottomTabs from "@/components/bottom-tabs";
 import AssetHeader from "@/components/asset-header";
 import { MarketDrawer } from "@/components/market-drawer";
 import { MobileOrderDrawer } from "@/components/mobile-order-drawer";
+
+const TVChartContainer = dynamic(
+  () =>
+    import("@/components/TVChartContainer").then((mod) => mod.TVChartContainer),
+  { ssr: false },
+);
 
 const App: React.FC = () => {
   const [selectedSymbol, setSelectedSymbol] = useState("NASDAQ:AAPL");
@@ -180,7 +186,9 @@ const App: React.FC = () => {
         {/* Mobile Main Body */}
         <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
           <div className="flex-1 relative">
-            <TradingViewChart symbol={selectedSymbol} />
+            <div style={{ width: "100%", height: "400px" }}>
+              <TVChartContainer symbol={selectedSymbol} />
+            </div>
           </div>
 
           <div
@@ -269,7 +277,9 @@ const App: React.FC = () => {
           <AssetHeader symbol={selectedSymbol} />
           <div className="flex-1 flex flex-col min-h-0 relative">
             <div className="flex-1 border-b border-[#2b2f36] relative z-0">
-              <TradingViewChart symbol={selectedSymbol} />
+              <div style={{ width: "100%", height: "400px" }}>
+                <TVChartContainer symbol={selectedSymbol} />
+              </div>
             </div>
             <div
               className={`transition-all duration-300 ease-in-out border-t border-[#2b2f36] bg-[#0b0e11] overflow-hidden ${isBottomPanelCollapsed ? "h-[40px]" : "h-[250px]"}`}
