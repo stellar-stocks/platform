@@ -55,8 +55,6 @@ export function ConnectButton({ disabled }: { disabled?: boolean }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authenticated]);
 
-  if (!ready) return <Button disabled>Loading...</Button>;
-
   if (!authenticated) {
     return (
       <Button
