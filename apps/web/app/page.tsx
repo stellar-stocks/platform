@@ -14,12 +14,17 @@ import { MobileOrderDrawer } from "@/components/mobile-order-drawer";
 const App: React.FC = () => {
   const [selectedSymbol, setSelectedSymbol] = useState("NASDAQ:AAPL");
   const [isBottomPanelCollapsed, setIsBottomPanelCollapsed] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 1024);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    const checkMobile = () => {
+      if (typeof window !== "undefined") {
+        setIsMobile(window.innerWidth < 1024);
+      }
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   const currentTicker = selectedSymbol.split(":").pop() || "AAPL";
