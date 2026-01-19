@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Button } from "./ui/button";
 
 const OrderPanel: React.FC = () => {
   const [side, setSide] = useState<"buy" | "sell">("buy");
@@ -166,9 +167,9 @@ const OrderPanel: React.FC = () => {
         </div>
 
         {/* Neutral Action Button with White Accents */}
-        <button className="w-full bg-[#eaecef] hover:bg-white text-black font-bold py-3.5 rounded-xl text-[12px] shadow-lg transition-all active:scale-[0.98] mt-2">
+        <Button className="w-full bg-[#eaecef] hover:bg-white text-black font-bold py-3.5 rounded-xl text-[12px] shadow-lg transition-all active:scale-[0.98] mt-2">
           Connect Wallet to Trade
-        </button>
+        </Button>
 
         <div className="space-y-3 pt-4 text-[11px] font-medium text-[#848e9c]">
           <div className="flex justify-between items-center">
