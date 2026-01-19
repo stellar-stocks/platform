@@ -29,7 +29,6 @@ export const MobileOrderDrawer: React.FC<MobileOrderDrawerProps> = ({
         <div className="bg-[#0b0e11] rounded-t-[20px] flex-1 overflow-y-auto no-scrollbar pb-8">
           {/* Handle for swiping */}
           <div className="sticky top-0 bg-[#0b0e11] z-10 pt-4 pb-2">
-            <div className="mx-auto w-12 h-1.5 rounded-full bg-[#2b2f36]" />
             {/* Asset Mini Header inside Drawer */}
             <div className="flex items-center justify-between px-5 mt-4">
               <div className="flex items-center gap-2">
