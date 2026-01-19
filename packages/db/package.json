@@ -1,0 +1,21 @@
+{
+  "name": "db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcrypt-ts": "^7.1.0",
+    "dotenv": "^16.6.1",
+    "drizzle-kit": "^0.31.8",
+    "drizzle-orm": "^0.43.1",
+    "orderedmap": "^2.1.1",
+    "postgres": "^3.4.8"
+  }
+}
