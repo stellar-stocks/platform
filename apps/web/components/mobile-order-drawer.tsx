@@ -10,6 +10,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import OrderPanel from "./order-panel";
+import AssetHeader from "./asset-header";
 
 interface MobileOrderDrawerProps {
   trigger: React.ReactNode;
@@ -27,26 +28,8 @@ export const MobileOrderDrawer: React.FC<MobileOrderDrawerProps> = ({
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
       <DrawerContent className="bg-[#0b0e11] flex flex-col rounded-t-[20px] max-h-[96%] fixed bottom-0 left-0 right-0 z-50 border-t border-[#1e2329] outline-none">
         <div className="bg-[#0b0e11] rounded-t-[20px] flex-1 overflow-y-auto no-scrollbar pb-8">
-          {/* Handle for swiping */}
-          <div className="sticky top-0 bg-[#0b0e11] z-10 pt-4 pb-2">
-            {/* Asset Mini Header inside Drawer */}
-            <div className="flex items-center justify-between px-5 mt-4">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-[10px] font-bold">
-                  {symbol.charAt(0)}
-                </div>
-                <span className="font-bold text-sm uppercase">{symbol}</span>
-                <span className="text-[10px] text-[#848e9c] bg-[#1e2329] px-1 rounded">
-                  50x
-                </span>
-              </div>
-              <div className="text-right">
-                <div className="text-sm font-bold">3,341.39</div>
-                <div className="text-[10px] text-green-500 font-bold">
-                  +0.87%
-                </div>
-              </div>
-            </div>
+          <div className="sticky top-0 z-20">
+            <AssetHeader symbol={symbol} />
           </div>
           <div className="px-1">
             <OrderPanel />
