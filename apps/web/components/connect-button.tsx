@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { usePrivy } from "@privy-io/react-auth";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { useCreateWallet } from "@privy-io/react-auth/extended-chains";
 import { getAddressFromPublicKey } from "@stacks/transactions";
 import { Button } from "./ui/button";
 
 export function ConnectButton({ disabled }: { disabled?: boolean }) {
+  const { wallets } = useWallets();
   const { ready, authenticated, login, logout, user, getAccessToken } =
     usePrivy();
   const { createWallet } = useCreateWallet();
@@ -52,6 +53,7 @@ export function ConnectButton({ disabled }: { disabled?: boolean }) {
     if (authenticated && !walletId && !isCreating) {
       create();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authenticated]);
 

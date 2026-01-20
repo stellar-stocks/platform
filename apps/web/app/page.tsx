@@ -182,7 +182,7 @@ const App: React.FC = () => {
         <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
           <div className="flex-1 relative">
             <div style={{ width: "100%", height: "400px" }}>
-              <TradingViewChart symbol={selectedSymbol} />
+              <TradingViewChart />
             </div>
           </div>
 
@@ -273,7 +273,7 @@ const App: React.FC = () => {
           <div className="flex-1 flex flex-col min-h-0 relative">
             <div className="flex-1 border-b border-[#2b2f36] relative z-0">
               <div style={{ width: "100%", height: "400px" }}>
-                <TradingViewChart symbol={selectedSymbol} />
+                <TradingViewChart />
               </div>
             </div>
             <div
