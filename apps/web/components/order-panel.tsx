@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { usePrivy } from "@privy-io/react-auth";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 
@@ -11,6 +12,25 @@ const OrderPanel: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [verificationUrl, setVerificationUrl] = useState<string>("");
+  const [isKYCVerified, setIsKYCVerified] = useState<boolean>(false);
+  const { user } = usePrivy();
+
+  // Fetch KYC status on mount or when user changes
+  useEffect(() => {
+    const fetchKYC = async () => {
+      if (!user?.wallet?.address) return;
+      try {
+        const res = await fetch(
+          `/api/user?walletId=${encodeURIComponent(user.wallet.address)}`,
+        );
+        const data = await res.json();
+        setIsKYCVerified(!!data.isKYCVerified);
+      } catch {
+        setIsKYCVerified(false);
+      }
+    };
+    fetchKYC();
+  }, [user?.wallet?.address]);
 
   const getVerificationUrl = async () => {
     setIsLoading(true);
@@ -20,8 +40,8 @@ const OrderPanel: React.FC = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           isIframe: false,
-          vendor_data: "user@example.com",
-        }), // Replace with actual user data
+          vendor_data: user?.wallet?.address || "",
+        }),
       });
       const data = await res.json();
       if (data.url) {
@@ -34,6 +54,17 @@ const OrderPanel: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Call this after user completes KYC (simulate for now)
+  const updateKYCStatus = async () => {
+    if (!user?.wallet?.address) return;
+    await fetch("/api/user-kyc-verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ walletId: user.wallet.address }),
+    });
+    setIsKYCVerified(true);
   };
 
   return (
@@ -194,43 +225,57 @@ const OrderPanel: React.FC = () => {
           </label>
         </div>
 
-        {/* Trade Button opens modal for KYC navigation */}
-        <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-          <DialogTrigger asChild>
-            <Button
-              className="w-full bg-[#eaecef] hover:bg-white text-black font-bold py-3.5 rounded-xl text-[12px] shadow-lg transition-all active:scale-[0.98] mt-2"
-              onClick={async () => {
-                setModalOpen(true);
-                await getVerificationUrl();
-              }}
-              disabled={isLoading}
-            >
-              {isLoading ? "Loading..." : "Trade (KYC Required)"}
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-md">
-            <div className="flex flex-col items-center justify-center py-6">
-              <h2 className="text-lg font-bold mb-2">KYC Required</h2>
-              <p className="mb-4 text-center">
-                To trade, you must complete identity verification (KYC) as
-                required by exchanges.
-              </p>
+        {/* Show KYC modal if not verified, else show normal trade button */}
+        {!isKYCVerified ? (
+          <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+            <DialogTrigger asChild>
               <Button
-                className="w-full bg-[#2ebd85] text-white font-bold py-2 rounded-lg"
-                onClick={() => {
-                  if (verificationUrl) {
-                    window.open(verificationUrl, "_blank");
-                  }
+                className="w-full bg-[#eaecef] hover:bg-white text-black font-bold py-3.5 rounded-xl text-[12px] shadow-lg transition-all active:scale-[0.98] mt-2"
+                onClick={async () => {
+                  setModalOpen(true);
+                  await getVerificationUrl();
                 }}
-                disabled={!verificationUrl}
+                disabled={isLoading}
               >
-                {verificationUrl
-                  ? "Go to Verification"
-                  : "Getting Verification Link..."}
+                {isLoading ? "Loading..." : "Trade (KYC Required)"}
               </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </DialogTrigger>
+            <DialogContent className="max-w-md">
+              <div className="flex flex-col items-center justify-center py-6">
+                <h2 className="text-lg font-bold mb-2">KYC Required</h2>
+                <p className="mb-4 text-center">
+                  To trade, you must complete identity verification (KYC) as
+                  required by exchanges.
+                </p>
+                <Button
+                  className="w-full bg-[#2ebd85] text-white font-bold py-2 rounded-lg"
+                  onClick={async () => {
+                    if (verificationUrl) {
+                      window.open(verificationUrl, "_blank");
+                      // Simulate user returning after KYC (in real app, listen for callback or poll status)
+                      setTimeout(updateKYCStatus, 3000);
+                    }
+                  }}
+                  disabled={!verificationUrl}
+                >
+                  {verificationUrl
+                    ? "Go to Verification"
+                    : "Getting Verification Link..."}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        ) : (
+          <Button
+            className="w-full bg-[#2ebd85] hover:bg-green-500 text-white font-bold py-3.5 rounded-xl text-[12px] shadow-lg transition-all active:scale-[0.98] mt-2"
+            onClick={() => {
+              // Place order logic here
+              alert("Order placed!");
+            }}
+          >
+            Trade
+          </Button>
+        )}
 
         <div className="space-y-3 pt-4 text-[11px] font-medium text-[#848e9c]">
           <div className="flex justify-between items-center">
