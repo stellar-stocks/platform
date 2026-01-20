@@ -268,12 +268,14 @@ const App: React.FC = () => {
         />
         <main className="flex-1 flex flex-col border-r border-[#2b2f36] overflow-hidden">
           <AssetHeader symbol={selectedSymbol} />
-          <div className="flex-1 flex flex-col min-h-0 relative">
-            <div className="flex-1 border-b border-[#2b2f36] relative z-0">
-              <TradingViewChart />
+          <div className="flex-1 flex flex-col min-h-0">
+            <div className="flex-1 border-b border-[#2b2f36] flex min-h-0">
+              <div className="flex-1 min-h-0">
+                <TradingViewChart symbol={selectedSymbol} />
+              </div>
             </div>
             <div
-              className={`transition-all duration-300 ease-in-out border-t border-[#2b2f36] bg-[#0b0e11] overflow-hidden ${isBottomPanelCollapsed ? "h-[40px]" : "h-[250px]"}`}
+              className={`transition-all duration-300 ease-in-out border-t border-[#2b2f36] bg-[#0b0e11] ${isBottomPanelCollapsed ? "h-[40px] overflow-hidden" : "min-h-[250px] h-auto overflow-visible"}`}
             >
               <BottomTabs
                 isCollapsed={isBottomPanelCollapsed}
