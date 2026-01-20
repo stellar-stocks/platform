@@ -17,7 +17,30 @@ export function ConnectButton({ disabled }: { disabled?: boolean }) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  // Create wallet automatically after authentication
+  // Always set addresses from existing wallet(s) after authentication or wallet change
+  useEffect(() => {
+    if (authenticated && wallets && wallets.length > 0) {
+      // Use the first wallet for address display (customize as needed)
+      const wallet = wallets[0];
+      if (wallet && wallet.address) {
+        setWalletId(wallet.address ?? null);
+        setWalletPublicKey(wallet.address ?? null);
+        setMainnetAddress(
+          getAddressFromPublicKey(wallet.address, "mainnet") ?? null,
+        );
+        setTestnetAddress(
+          getAddressFromPublicKey(wallet.address, "testnet") ?? null,
+        );
+      }
+    } else {
+      setWalletId(null);
+      setWalletPublicKey(null);
+      setMainnetAddress(null);
+      setTestnetAddress(null);
+    }
+  }, [authenticated, wallets]);
+
+  // Create wallet automatically after authentication if none exists
   useEffect(() => {
     const create = async () => {
       setIsCreating(true);
@@ -50,12 +73,11 @@ export function ConnectButton({ disabled }: { disabled?: boolean }) {
         setIsCreating(false);
       }
     };
-    if (authenticated && !walletId && !isCreating) {
+    if (authenticated && (!wallets || wallets.length === 0) && !isCreating) {
       create();
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authenticated]);
+  }, [authenticated, wallets]);
 
   if (!authenticated) {
     return (
