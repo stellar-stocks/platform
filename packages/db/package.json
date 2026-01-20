@@ -3,19 +3,33 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "keywords": [],
-  "author": "",
+  "exports": {
+    "./src/errors": "./src/lib/errors.ts",
+    "./src/utils": "./src/lib/utils.ts",
+    "./src/schema": "./src/schema.ts",
+    "./src/queries": "./src/queries.ts",
+    "./src/migrate": "./src/migrate.ts",
+    ".": "./index.ts"
+  },
+  "scripts": {
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
+  },
+  "author": "Daniel",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "bcrypt-ts": "^7.1.0",
-    "dotenv": "^16.6.1",
-    "drizzle-kit": "^0.31.8",
+    "bcrypt-ts": "^7.0.0",
+    "dotenv": "^16.5.0",
+    "drizzle-kit": "^0.31.1",
     "drizzle-orm": "^0.43.1",
     "orderedmap": "^2.1.1",
-    "postgres": "^3.4.8"
+    "postgres": "^3.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "tools": "workspace:*"
   }
 }

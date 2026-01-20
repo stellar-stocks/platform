@@ -3,12 +3,19 @@
   "version": "0.1.0",
   "type": "module",
   "private": true,
+  "exports": {
+    "./src/errors": "./src/lib/errors.ts",
+    "./src/utils": "./src/lib/utils.ts",
+    "./src/schema": "./src/schema.ts",
+    "./src/queries": "./src/queries.ts",
+    "./src/migrate": "./src/migrate.ts",
+    ".": "./index.ts"
+  },
   "scripts": {
-    "dev": "next dev --port 3000 --webpack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint --max-warnings 0",
-    "check-types": "next typegen && tsc --noEmit"
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

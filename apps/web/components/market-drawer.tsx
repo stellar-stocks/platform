@@ -84,7 +84,6 @@ export const MarketDrawer: React.FC<MarketDrawerProps> = ({
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
       <DrawerContent className="bg-[#0b0e11] flex flex-col rounded-t-[10px] h-[85%] mt-24 fixed bottom-0 left-0 right-0 z-50 border-t border-[#1e2329] outline-none">
         <div className="p-4 bg-[#0b0e11] rounded-t-[10px] flex-1 overflow-y-auto no-scrollbar">
-          <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-[#2b2f36] mb-6" />
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold">Markets</h2>
           </div>

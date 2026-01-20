@@ -80,7 +80,6 @@ const AssetHeader: React.FC<AssetHeaderProps> = ({ symbol }) => {
             OPERATIONAL
           </span>
         </div>
-        <ConnectButton />
       </div>
     </div>
   );
