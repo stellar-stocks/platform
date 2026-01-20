@@ -20,7 +20,6 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "npm@11.6.1",
   "workspaces": [
     "apps/*",
     "packages/*"

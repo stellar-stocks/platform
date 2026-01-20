@@ -29,7 +29,6 @@
     "postgres": "^3.4.5"
   },
   "devDependencies": {
-    "@types/node": "^22.15.3",
-    "tools": "workspace:*"
+    "@types/node": "^22.15.3"
   }
 }
