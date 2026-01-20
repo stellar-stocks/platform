@@ -6,6 +6,13 @@ function TradingViewWidget() {
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Clean up any previous widget/script
+    if (container.current) {
+      while (container.current.firstChild) {
+        container.current.removeChild(container.current.firstChild);
+      }
+    }
+
     const script = document.createElement("script");
     script.src =
       "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
@@ -40,6 +47,15 @@ function TradingViewWidget() {
     if (container.current) {
       container.current.appendChild(script);
     }
+
+    // Cleanup function to remove the widget and script
+    return () => {
+      if (container.current) {
+        while (container.current.firstChild) {
+          container.current.removeChild(container.current.firstChild);
+        }
+      }
+    };
   }, []);
 
   return (
@@ -57,10 +73,7 @@ function TradingViewWidget() {
           href="https://www.tradingview.com/symbols/NASDAQ-AAPL/"
           rel="noopener nofollow"
           target="_blank"
-        >
-          <span className="blue-text">AAPL stock chart</span>
-        </a>
-        <span className="trademark"> by TradingView</span>
+        ></a>
       </div>
     </div>
   );

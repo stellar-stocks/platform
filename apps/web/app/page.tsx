@@ -181,9 +181,7 @@ const App: React.FC = () => {
         {/* Mobile Main Body */}
         <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
           <div className="flex-1 relative">
-            <div style={{ width: "100%", height: "400px" }}>
-              <TradingViewChart />
-            </div>
+            <TradingViewChart />
           </div>
 
           <div
@@ -272,9 +270,7 @@ const App: React.FC = () => {
           <AssetHeader symbol={selectedSymbol} />
           <div className="flex-1 flex flex-col min-h-0 relative">
             <div className="flex-1 border-b border-[#2b2f36] relative z-0">
-              <div style={{ width: "100%", height: "400px" }}>
-                <TradingViewChart />
-              </div>
+              <TradingViewChart />
             </div>
             <div
               className={`transition-all duration-300 ease-in-out border-t border-[#2b2f36] bg-[#0b0e11] overflow-hidden ${isBottomPanelCollapsed ? "h-[40px]" : "h-[250px]"}`}
