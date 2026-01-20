@@ -2,11 +2,39 @@
 
 import React, { useState } from "react";
 import { Button } from "./ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 
 const OrderPanel: React.FC = () => {
   const [side, setSide] = useState<"buy" | "sell">("buy");
   const [orderType, setOrderType] = useState<"market" | "limit">("limit");
   const [percentage, setPercentage] = useState(21);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [verificationUrl, setVerificationUrl] = useState<string>("");
+
+  const getVerificationUrl = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/verification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          isIframe: false,
+          vendor_data: "user@example.com",
+        }), // Replace with actual user data
+      });
+      const data = await res.json();
+      if (data.url) {
+        setVerificationUrl(data.url);
+      } else {
+        alert(data.error || "Failed to get verification URL");
+      }
+    } catch (err) {
+      alert("Error getting verification URL");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col h-full bg-[#0b0e11] select-none">
@@ -166,10 +194,43 @@ const OrderPanel: React.FC = () => {
           </label>
         </div>
 
-        {/* Neutral Action Button with White Accents */}
-        <Button className="w-full bg-[#eaecef] hover:bg-white text-black font-bold py-3.5 rounded-xl text-[12px] shadow-lg transition-all active:scale-[0.98] mt-2">
-          Connect Wallet to Trade
-        </Button>
+        {/* Trade Button opens modal for KYC navigation */}
+        <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+          <DialogTrigger asChild>
+            <Button
+              className="w-full bg-[#eaecef] hover:bg-white text-black font-bold py-3.5 rounded-xl text-[12px] shadow-lg transition-all active:scale-[0.98] mt-2"
+              onClick={async () => {
+                setModalOpen(true);
+                await getVerificationUrl();
+              }}
+              disabled={isLoading}
+            >
+              {isLoading ? "Loading..." : "Trade (KYC Required)"}
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-md">
+            <div className="flex flex-col items-center justify-center py-6">
+              <h2 className="text-lg font-bold mb-2">KYC Required</h2>
+              <p className="mb-4 text-center">
+                To trade, you must complete identity verification (KYC) as
+                required by exchanges.
+              </p>
+              <Button
+                className="w-full bg-[#2ebd85] text-white font-bold py-2 rounded-lg"
+                onClick={() => {
+                  if (verificationUrl) {
+                    window.open(verificationUrl, "_blank");
+                  }
+                }}
+                disabled={!verificationUrl}
+              >
+                {verificationUrl
+                  ? "Go to Verification"
+                  : "Getting Verification Link..."}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         <div className="space-y-3 pt-4 text-[11px] font-medium text-[#848e9c]">
           <div className="flex justify-between items-center">
