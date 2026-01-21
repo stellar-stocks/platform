@@ -1,3 +1,54 @@
+# stellar-stocks
+
+## Setup Instructions
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [pnpm](https://pnpm.io/) (v8+ recommended)
+- [PostgreSQL](https://www.postgresql.org/)
+
+### Install dependencies
+
+```sh
+pnpm install
+```
+
+### Setup environment variables
+
+- Copy `.env.example` to `.env` and fill in the required values (e.g. `DATABASE_URL`)
+
+### Database
+
+- To generate migrations:
+  ```sh
+  pnpm --filter @repo/db db:generate
+  ```
+- To run migrations:
+  ```sh
+  pnpm --filter @repo/db db:migrate
+  ```
+- To open Drizzle Studio:
+  ```sh
+  pnpm --filter @repo/db db:studio
+  ```
+
+### Development
+
+- To start the web app:
+  ```sh
+  pnpm --filter web dev
+  ```
+
+### Notes
+
+- All local packages are linked using pnpm workspaces (see `pnpm-workspace.yaml`).
+- If you add a new package, use `pnpm add <pkg> -F <workspace>` to add it to the correct workspace.
+
+---
+
+For more details, see the README files in each package/app folder.
+
 # Turborepo starter
 
 This Turborepo starter is maintained by the Turborepo core team.

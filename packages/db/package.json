@@ -5,11 +5,11 @@
   "main": "index.js",
   "keywords": [],
   "exports": {
-    "./src/errors": "./src/lib/errors.ts",
-    "./src/utils": "./src/lib/utils.ts",
-    "./src/schema": "./src/schema.ts",
-    "./src/queries": "./src/queries.ts",
-    "./src/migrate": "./src/migrate.ts",
+    "./errors": "./src/lib/errors.ts",
+    "./utils": "./src/lib/utils.ts",
+    "./schema": "./src/schema.ts",
+    "./queries": "./src/queries.ts",
+    "./migrate": "./src/migrate.ts",
     ".": "./index.ts"
   },
   "scripts": {

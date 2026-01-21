@@ -17,43 +17,39 @@ import { user, type User } from "./schema";
 
 import { wallet, type Wallet } from "./schema";
 import { db } from "../index";
+import { AppError } from "./lib/errors";
 
-export async function getUser(email: string): Promise<Array<User>> {
   try {
     return await db.select().from(user).where(eq(user.email, email));
   } catch (error) {
-    throw new Error("bad_request:database");
+    throw new AppError("bad_request:database", "Failed to get user by email");
   }
 }
 
-export async function getUserById(id: string): Promise<User | null> {
   try {
     const result = await db.select().from(user).where(eq(user.id, id));
     return result[0] ?? null;
   } catch (error) {
-    throw new Error("bad_request:database");
+    throw new AppError("bad_request:database", "Failed to get user by id");
   }
 }
 
-export async function createUser(
   data: Omit<User, "id" | "createdAt" | "updatedAt">,
 ): Promise<User> {
   try {
-    // Ensure required fields are present
     if (!data.walletId || !data.email) {
-      throw new Error("walletId and email are required");
+      throw new AppError("validation:user", "walletId and email are required");
     }
     const [created] = await db.insert(user).values(data).returning();
     if (!created) {
-      throw new Error("bad_request:database");
+      throw new AppError("bad_request:database", "Failed to create user");
     }
     return created;
   } catch (error) {
-    throw new Error("bad_request:database");
+    throw new AppError("bad_request:database", "Failed to create user");
   }
 }
 
-export async function updateUser(
   id: string,
   data: Partial<User>,
 ): Promise<User> {
@@ -64,19 +60,18 @@ export async function updateUser(
       .where(eq(user.id, id))
       .returning();
     if (!updated) {
-      throw new Error("bad_request:database");
+      throw new AppError("bad_request:database", "Failed to update user");
     }
     return updated;
   } catch (error) {
-    throw new Error("bad_request:database");
+    throw new AppError("bad_request:database", "Failed to update user");
   }
 }
 
-export async function deleteUser(id: string): Promise<void> {
   try {
     await db.delete(user).where(eq(user.id, id));
   } catch (error) {
-    throw new Error("bad_request:database");
+    throw new AppError("bad_request:database", "Failed to delete user");
   }
 }
 
