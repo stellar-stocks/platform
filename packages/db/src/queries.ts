@@ -35,9 +35,18 @@ export async function getUserById(id: string): Promise<User | null> {
   }
 }
 
-export async function createUser(data: Partial<User>): Promise<User> {
+export async function createUser(
+  data: Omit<User, "id" | "createdAt" | "updatedAt">,
+): Promise<User> {
   try {
+    // Ensure required fields are present
+    if (!data.walletId || !data.email) {
+      throw new Error("walletId and email are required");
+    }
     const [created] = await db.insert(user).values(data).returning();
+    if (!created) {
+      throw new Error("bad_request:database");
+    }
     return created;
   } catch (error) {
     throw new Error("bad_request:database");
@@ -54,6 +63,9 @@ export async function updateUser(
       .set(data)
       .where(eq(user.id, id))
       .returning();
+    if (!updated) {
+      throw new Error("bad_request:database");
+    }
     return updated;
   } catch (error) {
     throw new Error("bad_request:database");
@@ -87,9 +99,18 @@ export async function getWalletsByUserId(
   }
 }
 
-export async function createWallet(data: Partial<Wallet>): Promise<Wallet> {
+export async function createWallet(
+  data: Omit<Wallet, "id" | "createdAt" | "updatedAt">
+): Promise<Wallet> {
   try {
+    // Ensure required fields are present
+    if (!data.userId || !data.address) {
+      throw new Error("userId and address are required");
+    }
     const [created] = await db.insert(wallet).values(data).returning();
+    if (!created) {
+      throw new Error("bad_request:database");
+    }
     return created;
   } catch (error) {
     throw new Error("bad_request:database");
@@ -106,6 +127,9 @@ export async function updateWallet(
       .set(data)
       .where(eq(wallet.id, id))
       .returning();
+    if (!updated) {
+      throw new Error("bad_request:database");
+    }
     return updated;
   } catch (error) {
     throw new Error("bad_request:database");
