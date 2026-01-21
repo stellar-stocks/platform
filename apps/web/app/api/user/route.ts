@@ -6,18 +6,19 @@ import {
   updateUser,
   deleteUser,
 } from "@repo/db/src/queries";
-import { NotFoundError, ValidationError } from "@repo/db/src/errors";
+import { AppError } from "@repo/db/src/errors";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const email = searchParams.get("email");
   try {
-    if (!email) throw new ValidationError("Missing email");
+    if (!email) throw new AppError("bad_request:user", "Missing email");
     const users = await getUser(email);
-    if (!users.length) throw new NotFoundError("User not found");
+    if (!users.length) throw new AppError("not_found:user", "User not found");
     return NextResponse.json(users[0]);
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    if (error instanceof AppError) return error.toResponse();
+    return new AppError("internal:user", error.message).toResponse();
   }
 }
 
@@ -27,6 +28,7 @@ export async function POST(req: NextRequest) {
     const user = await createUser(body);
     return NextResponse.json(user);
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    if (error instanceof AppError) return error.toResponse();
+    return new AppError("internal:user", error.message).toResponse();
   }
 }

@@ -6,7 +6,7 @@ import {
   updateWallet,
   deleteWallet,
 } from "@repo/db/src/queries";
-import { NotFoundError, ValidationError } from "@repo/db/src/errors";
+import { AppError } from "@repo/db/src/errors";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -15,16 +15,17 @@ export async function GET(req: NextRequest) {
   try {
     if (id) {
       const wallet = await getWalletById(id);
-      if (!wallet) throw new NotFoundError("Wallet not found");
+      if (!wallet) throw new AppError("not_found:wallet", "Wallet not found");
       return NextResponse.json(wallet);
     }
     if (userId) {
       const wallets = await getWalletsByUserId(userId);
       return NextResponse.json(wallets);
     }
-    throw new ValidationError("Missing id or userId");
+    throw new AppError("bad_request:wallet", "Missing id or userId");
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    if (error instanceof AppError) return error.toResponse();
+    return new AppError("internal:wallet", error.message).toResponse();
   }
 }
 
@@ -34,6 +35,7 @@ export async function POST(req: NextRequest) {
     const wallet = await createWallet(body);
     return NextResponse.json(wallet);
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    if (error instanceof AppError) return error.toResponse();
+    return new AppError("internal:wallet", error.message).toResponse();
   }
 }

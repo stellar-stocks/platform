@@ -11,11 +11,7 @@ import {
   updateWallet,
   deleteWallet,
 } from "@repo/db/src/queries";
-import {
-  NotFoundError,
-  ValidationError,
-  DatabaseError,
-} from "@repo/db/src/errors";
+import { AppError } from "@repo/db/src/errors";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -24,17 +20,18 @@ export async function GET(req: NextRequest) {
   try {
     if (userId) {
       const user = await getUserById(userId);
-      if (!user) throw new NotFoundError("User not found");
+      if (!user) throw new AppError("not_found:user", "User not found");
       return NextResponse.json(user);
     }
     if (walletId) {
       const wallet = await getWalletById(walletId);
-      if (!wallet) throw new NotFoundError("Wallet not found");
+      if (!wallet) throw new AppError("not_found:wallet", "Wallet not found");
       return NextResponse.json(wallet);
     }
-    throw new ValidationError("Missing userId or walletId");
+    throw new AppError("bad_request:api", "Missing userId or walletId");
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    if (error instanceof AppError) return error.toResponse();
+    return new AppError("internal:api", error.message).toResponse();
   }
 }
 
@@ -49,9 +46,10 @@ export async function POST(req: NextRequest) {
       const wallet = await createWallet(body.data);
       return NextResponse.json(wallet);
     }
-    throw new ValidationError("Invalid type");
+    throw new AppError("bad_request:api", "Invalid type");
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    if (error instanceof AppError) return error.toResponse();
+    return new AppError("internal:api", error.message).toResponse();
   }
 }
 
@@ -66,9 +64,10 @@ export async function PUT(req: NextRequest) {
       const wallet = await updateWallet(body.id, body.data);
       return NextResponse.json(wallet);
     }
-    throw new ValidationError("Invalid type");
+    throw new AppError("bad_request:api", "Invalid type");
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    if (error instanceof AppError) return error.toResponse();
+    return new AppError("internal:api", error.message).toResponse();
   }
 }
 
@@ -85,8 +84,9 @@ export async function DELETE(req: NextRequest) {
       await deleteWallet(walletId);
       return NextResponse.json({ success: true });
     }
-    throw new ValidationError("Missing userId or walletId");
+    throw new AppError("bad_request:api", "Missing userId or walletId");
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    if (error instanceof AppError) return error.toResponse();
+    return new AppError("internal:api", error.message).toResponse();
   }
 }
