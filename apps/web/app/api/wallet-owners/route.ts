@@ -4,7 +4,7 @@ import { getPrivyServerClient } from "@/utils/privy-server-client";
 // GET /api/wallet-owners
 export async function GET(request: NextRequest) {
   try {
-    const privy = getPrivyServerClient();
+    const privy = await getPrivyServerClient();
     // Fetch all users using the correct Privy API method
     const users = await privy.getUsers();
     // Extract wallet addresses for each user
