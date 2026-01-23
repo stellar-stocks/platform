@@ -19,6 +19,7 @@ import { wallet, type Wallet } from "./schema";
 import { db } from "../index";
 import { AppError } from "./lib/errors";
 
+export async function getUser(email: string): Promise<User[]> {
   try {
     return await db.select().from(user).where(eq(user.email, email));
   } catch (error) {
@@ -26,6 +27,7 @@ import { AppError } from "./lib/errors";
   }
 }
 
+export async function getUserById(id: string): Promise<User | null> {
   try {
     const result = await db.select().from(user).where(eq(user.id, id));
     return result[0] ?? null;
@@ -34,6 +36,24 @@ import { AppError } from "./lib/errors";
   }
 }
 
+export async function getUserByWalletId(
+  walletId: string,
+): Promise<User | null> {
+  try {
+    const result = await db
+      .select()
+      .from(user)
+      .where(eq(user.walletId, walletId));
+    return result[0] ?? null;
+  } catch (error) {
+    throw new AppError(
+      "bad_request:database",
+      "Failed to get user by walletId",
+    );
+  }
+}
+
+export async function createUser(
   data: Omit<User, "id" | "createdAt" | "updatedAt">,
 ): Promise<User> {
   try {
@@ -50,6 +70,7 @@ import { AppError } from "./lib/errors";
   }
 }
 
+export async function updateUser(
   id: string,
   data: Partial<User>,
 ): Promise<User> {
@@ -68,6 +89,7 @@ import { AppError } from "./lib/errors";
   }
 }
 
+export async function deleteUser(id: string): Promise<void> {
   try {
     await db.delete(user).where(eq(user.id, id));
   } catch (error) {
@@ -95,7 +117,7 @@ export async function getWalletsByUserId(
 }
 
 export async function createWallet(
-  data: Omit<Wallet, "id" | "createdAt" | "updatedAt">
+  data: Omit<Wallet, "id" | "createdAt" | "updatedAt">,
 ): Promise<Wallet> {
   try {
     // Ensure required fields are present

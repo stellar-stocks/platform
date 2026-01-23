@@ -3,10 +3,8 @@ import {
   getWalletById,
   getWalletsByUserId,
   createWallet,
-  updateWallet,
-  deleteWallet,
-} from "@repo/db/src/queries";
-import { AppError } from "@repo/db/src/errors";
+} from "@repo/db/queries";
+import { AppError } from "@repo/db/errors";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);

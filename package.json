@@ -25,7 +25,25 @@
     "packages/*"
   ],
   "dependencies": {
+    "@noble/hashes": "1.1.0",
+    "@scure/bip32": "1.1.0",
     "dotenv-cli": "^11.0.0",
-    "iron-session": "^8.0.4"
+    "iron-session": "^8.0.4",
+    "next": "16.1.4"
+  },
+  "overrides": {
+    "lucide-react": "^0.563.0",
+    "@scure/bip32": "1.1.0",
+    "@noble/hashes": "1.1.0"
+  },
+  "packageManager": "pnpm@10.28.1",
+  "pnpm": {
+    "overrides": {
+      "next": "16.1.4",
+      "lucide-react": "0.383.0",
+      "@privy-io/react-auth": "^2.25.0",
+      "react": "19.2.3",
+      "react-dom": "19.2.3"
+    }
   }
 }

@@ -1,25 +1,30 @@
 "use client";
 
 import { PrivyProvider } from "@privy-io/react-auth";
+import type { ReactNode, ReactElement } from "react";
 
-const privyAppId = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
-
-if (!privyAppId) {
-  // It's better not to throw during build if possible, or handle gracefully
-  console.warn("Privy app ID is not defined");
+interface PrivyProvidersProps {
+  children: ReactNode;
 }
 
 export default function PrivyProviders({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+}: PrivyProvidersProps): ReactElement {
+  const appId = process.env.NEXT_PUBLIC_PRIVY_APP_ID || "";
+
+  if (!appId) {
+    // Graceful fallback during build (won't crash)
+    return <>{children}</>;
+  }
+
   return (
     <PrivyProvider
-      appId={privyAppId || ""}
+      appId={appId}
       config={{
         loginMethods: ["email", "wallet", "google"],
-        embeddedWallets: { createOnLogin: "off" },
+        embeddedWallets: {
+          createOnLogin: "off", // Users must opt-in
+        },
         supportedChains: [
           {
             id: 1,
@@ -32,6 +37,11 @@ export default function PrivyProviders({
             },
           },
         ],
+        appearance: {
+          theme: "light",
+          accentColor: "#10b981", // Emerald green for trust
+          logo: "/logo.svg",
+        },
       }}
     >
       {children}

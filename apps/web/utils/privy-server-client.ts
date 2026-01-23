@@ -1,3 +1,5 @@
+"use server";
+
 import { PrivyClient } from "@privy-io/server-auth";
 
 let privyClientInstance: PrivyClient | null = null;

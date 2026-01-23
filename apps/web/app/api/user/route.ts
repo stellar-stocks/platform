@@ -1,12 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  getUser,
-  getUserById,
-  createUser,
-  updateUser,
-  deleteUser,
-} from "@repo/db/src/queries";
-import { AppError } from "@repo/db/src/errors";
+import { getUser, createUser } from "@repo/db/queries";
+import { AppError } from "@repo/db/errors";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);

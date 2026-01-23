@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updateUser, getUser } from "@repo/db/src/queries";
-import { AppError } from "@repo/db/src/errors";
-import { User } from "@repo/db/src/schema";
+import { updateUser, getUserById, getUser } from "@repo/db/queries";
+import { AppError } from "@repo/db/errors";
+import { User } from "@repo/db/schema";
 
 export async function POST(req: NextRequest) {
   const { email, walletId } = await req.json();
@@ -13,7 +13,8 @@ export async function POST(req: NextRequest) {
   try {
     let users: User[] = [];
     if (walletId) {
-      users = await getUser(walletId);
+      const userResult = await getUserById(walletId);
+      users = userResult ? [userResult] : [];
     }
     if ((!users || !users.length) && email) {
       users = await getUser(email);
