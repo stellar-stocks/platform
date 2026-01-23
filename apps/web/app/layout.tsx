@@ -5,13 +5,9 @@ import "./globals.css";
 import PrivyProviders from "@/providers/privy";
 import AppStateProvider from "@/providers/recoil";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
+const Inter = localFont({
+  src: "./fonts/inter/Inter-Regular.otf",
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
@@ -27,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
-      <body className={`${geistSans.className}`}>
+      <body className={`${Inter.className}`}>
         <AppStateProvider>
           <PrivyProviders>{children}</PrivyProviders>
         </AppStateProvider>
