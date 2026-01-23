@@ -8,7 +8,7 @@ let privyClientInstance: PrivyClient | null = null;
  * Get a configured Privy server client instance
  * This function creates a singleton instance to avoid recreating the client multiple times
  */
-export function getPrivyServerClient(): PrivyClient {
+export async function getPrivyServerClient(): Promise<PrivyClient> {
   if (privyClientInstance) {
     return privyClientInstance;
   }

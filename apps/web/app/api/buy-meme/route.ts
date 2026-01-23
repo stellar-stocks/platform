@@ -22,7 +22,7 @@ const CONTRACT_NAME = "perp-engine";
 export async function POST(req: NextRequest) {
   try {
     const { walletId, amount, symbol, isLong, leverage } = await req.json();
-    const privy = getPrivyServerClient();
+    const privy = await getPrivyServerClient();
 
     // 1. Fetch wallet
     const wallet = await privy.walletApi.getWallet({ id: walletId });
@@ -71,14 +71,15 @@ export async function POST(req: NextRequest) {
        console.warn("Export failed");
     }
     */
-    
+
     // For compilation success, we will return early if no key
     if (!privateKey) {
-        return Response.json({ error: "Private key export not available. Install 'ethers' to enable public key recovery from signatures." }, { status: 501 });
-    }
-
+      return Response.json(
+        {
+          error:
+            "Private key export not available. Install 'ethers' to enable public key recovery from signatures.",
         },
-        { status: 500 },
+        { status: 501 },
       );
     }
 
@@ -144,7 +145,10 @@ export async function POST(req: NextRequest) {
       senderKey: privateKey!,
     } as any);
 
-    const result = await broadcastTransaction(tx, network);
+    const result = await broadcastTransaction({
+      transaction: tx,
+      network: network, // Include the network parameter
+    });
 
     return Response.json({
       success: true,

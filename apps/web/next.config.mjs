@@ -17,6 +17,7 @@ const nextConfig = {
     }
     return config;
   },
+  turbopack: false,
 };
 
 export default nextConfig;
