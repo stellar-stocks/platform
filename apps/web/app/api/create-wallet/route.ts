@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const privy = getPrivyServerClient();
+    const privy = await getPrivyServerClient();
 
     // Create wallet for the specified user
     // Using bitcoin-segwit chain type which is compatible with Stacks
