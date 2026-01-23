@@ -1,5 +1,5 @@
+import React from "react";
 import type { Metadata } from "next";
-import Script from "next/script";
 import localFont from "next/font/local";
 import "./globals.css";
 import PrivyProviders from "@/providers/privy";
