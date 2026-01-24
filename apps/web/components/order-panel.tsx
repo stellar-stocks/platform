@@ -198,12 +198,12 @@ const OrderPanel: React.FC = () => {
 
                 {/* Custom Designed Thumb: Premium vertical pill */}
                 <div
-                  className="absolute h-7 w-3.5 bg-white rounded-[4px] shadow-[0_0_15px_rgba(255,255,255,0.4)] cursor-grab active:cursor-grabbing z-30 flex flex-col items-center justify-center border border-white/20"
+                  className="absolute h-7 w-3.5 bg-white rounded-[4px] cursor-grab active:cursor-grabbing z-30 flex flex-col items-center justify-center border border-white/20"
                   style={{
                     left: `calc(${percentage}% - 7px)`,
                   }}
                 >
-                  <div className="w-[1px] h-3.5 bg-black/30 rounded-full"></div>
+                  <div className="w-px h-3.5 bg-black/30 rounded-full"></div>
                 </div>
 
                 {/* Snap Indicators: Bold Rounded Rectangles (Tall and thick) */}
@@ -227,9 +227,15 @@ const OrderPanel: React.FC = () => {
                 />
               </div>
               <div className="bg-[#1e2329] border border-[#2b2f36] rounded-lg px-2 py-1 flex items-center gap-1 min-w-[50px] justify-center shadow-sm">
-                <span className="text-[12px] font-bold text-white">
-                  {percentage}%
-                </span>
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="1"
+                  value={percentage}
+                  onChange={(e) => setPercentage(parseInt(e.target.value))}
+                  className="w-full h-full bg-transparent text-center text-[12px] font-bold text-white outline-none"
+                />
               </div>
             </div>
           </div>

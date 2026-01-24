@@ -1,10 +1,13 @@
 "use client";
-// TradingViewWidget.jsx - FIXED
+import { CandlestickChart, LineChart } from "lucide-react";
 import React, { useEffect, useRef, memo, useState } from "react";
+import { Button } from "./ui/button";
 
 function TradingViewWidget({ symbol = "NASDAQ:AAPL" }) {
   const container = useRef<HTMLDivElement>(null);
   const [interval, setInterval] = useState("D");
+  const [chartType, setChartType] = useState("1"); // 1=candles, 0=bars, 2=line, 8=area
+
   const intervals = [
     { label: "1m", value: "1" },
     { label: "5m", value: "5" },
@@ -12,12 +15,14 @@ function TradingViewWidget({ symbol = "NASDAQ:AAPL" }) {
     { label: "1H", value: "60" },
     { label: "4H", value: "240" },
     { label: "1D", value: "D" },
-    { label: "1W", value: "W" },
-    { label: "1M", value: "M" },
+  ];
+
+  const chartTypes = [
+    { label: "Candles", value: "1", icon: <CandlestickChart size={14} /> },
+    { label: "Line", value: "2", icon: <LineChart size={14} /> },
   ];
 
   useEffect(() => {
-    // Clean up previous widget
     if (container.current) {
       while (container.current.firstChild) {
         container.current.removeChild(container.current.firstChild);
@@ -42,7 +47,7 @@ function TradingViewWidget({ symbol = "NASDAQ:AAPL" }) {
         "interval": "${interval}",
         "locale": "en",
         "save_image": true,
-        "style": "1",
+        "style": "${chartType}",
         "symbol": "${symbol}",
         "theme": "dark",
         "timezone": "Etc/UTC",
@@ -67,28 +72,44 @@ function TradingViewWidget({ symbol = "NASDAQ:AAPL" }) {
         }
       }
     };
-  }, [interval, symbol]);
+  }, [interval, symbol, chartType]);
 
   return (
     <div className="flex flex-col h-full w-full">
-      {/* FIX: Interval buttons OUTSIDE chart container */}
-      <div className="flex gap-2 p-2 bg-[#0d0f13] border-b border-[#1e2329] shrink-0 z-10">
-        {intervals.map((intv) => (
-          <button
-            key={intv.value}
-            onClick={() => setInterval(intv.value)}
-            className={`px-2 py-1 rounded text-[12px] font-medium transition-all flex-shrink-0 ${
-              interval === intv.value
-                ? "bg-blue-600 text-white shadow-md"
-                : "text-[#eaecef]/60 hover:text-white hover:bg-[#1e2329]"
-            }`}
-          >
-            {intv.label}
-          </button>
-        ))}
+      {/* Top Controls: Time LEFT + Icons RIGHT */}
+      <div className="flex items-center justify-between p-2 bg-[#0d0f13] border-b border-[#1e2329] shrink-0 z-10">
+        {/* Time Intervals - Left */}
+        <div className="flex gap-1">
+          {intervals.map((intv) => (
+            <button
+              key={intv.value}
+              onClick={() => setInterval(intv.value)}
+              className={`text-white px-2 py-1 rounded text-[12px] font-medium transition-all shrink-0 ${
+                interval === intv.value ? "font-bold" : "opacity-60"
+              }`}
+              title={intv.label}
+            >
+              {intv.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Chart Type Icon Buttons - Far RIGHT */}
+        <div className="flex gap-1 ml-auto">
+          {chartTypes.map((type) => (
+            <Button
+              variant={"ghost"}
+              key={type.value}
+              onClick={() => setChartType(type.value)}
+              title={`Switch to ${type.label}`}
+            >
+              <span>{type.icon}</span>
+            </Button>
+          ))}
+        </div>
       </div>
 
-      {/* Chart - Full available height */}
+      {/* Chart Container */}
       <div
         className="tradingview-widget-container flex-1 relative z-0"
         ref={container}
@@ -98,13 +119,7 @@ function TradingViewWidget({ symbol = "NASDAQ:AAPL" }) {
           className="tradingview-widget-container__widget"
           style={{ height: "100%", width: "100%" }}
         />
-        <div className="tradingview-widget-copyright">
-          <a
-            href="https://www.tradingview.com/symbols/NASDAQ-AAPL/"
-            rel="noopener nofollow"
-            target="_blank"
-          />
-        </div>
+        <div className="tradingview-widget-container__widget" />
       </div>
     </div>
   );
