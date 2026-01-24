@@ -98,10 +98,12 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
       <body className={`${Inter.className} dark`}>
-        <Navbar />
         <AppStateProvider>
           <ReownContextProvider cookies={cookies}>
-            <PrivyProviders>{children}</PrivyProviders>
+            <PrivyProviders>
+              <Navbar />
+              {children}
+            </PrivyProviders>
           </ReownContextProvider>
         </AppStateProvider>
       </body>

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
 import OrderPanel from "@/components/order-panel";
 import TradeHistory from "@/components/trading-history";
@@ -13,6 +12,7 @@ import TradingViewChart from "@/components/trading-view-chart";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const App: React.FC = () => {
+  const isMobile = useIsMobile();
   const [selectedSymbol, setSelectedSymbol] = useState("NASDAQ:AAPL");
   const [isBottomPanelCollapsed, setIsBottomPanelCollapsed] = useState(false);
   const currentTicker = selectedSymbol.split(":").pop() || "AAPL";
