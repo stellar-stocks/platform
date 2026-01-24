@@ -11,8 +11,8 @@ const AssetHeader: React.FC<AssetHeaderProps> = ({ symbol }) => {
   const ticker = symbol.split(":").pop() || symbol;
 
   return (
-    <div className="h-16 border-b border-[#1e2329] flex items-center px-2 justify-between bg-[#0b0e11]">
-      <div className="flex items-center gap-8">
+    <div className="h-16 border-b border-[#1e2329] flex items-center px-2 justify-between ">
+      <div className="flex items-center justify-between gap-8 w-full lg:w-auto">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-[#1e2329] border border-[#2b2f36] flex items-center justify-center font-bold text-white text-sm">
             {ticker.charAt(0)}
@@ -70,7 +70,7 @@ const AssetHeader: React.FC<AssetHeaderProps> = ({ symbol }) => {
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="items-center gap-4  hidden lg:flex">
         <div className="hidden md:flex flex-col items-end mr-4">
           <span className="text-[10px] text-[#848e9c] uppercase font-bold tracking-wider mb-0.5">
             System

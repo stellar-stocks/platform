@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Input } from "./ui/input";
 import { Search } from "lucide-react";
+import { stocks } from "@/utils/constants";
 
 interface SidebarProps {
   onSelectSymbol: (symbol: string) => void;
@@ -11,72 +12,6 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ onSelectSymbol, activeSymbol }) => {
   const [search, setSearch] = useState("");
-
-  const stocks = [
-    {
-      name: "Apple Inc.",
-      symbol: "AAPL",
-      price: "228.24",
-      change: "+1.10%",
-      vol: "52.4M",
-    },
-    {
-      name: "Nvidia Corp.",
-      symbol: "NVDA",
-      price: "142.12",
-      change: "+2.36%",
-      vol: "184.2M",
-    },
-    {
-      name: "Tesla, Inc.",
-      symbol: "TSLA",
-      price: "348.50",
-      change: "-1.72%",
-      vol: "82.1M",
-    },
-    {
-      name: "Microsoft",
-      symbol: "MSFT",
-      price: "415.32",
-      change: "+0.45%",
-      vol: "22.8M",
-    },
-    {
-      name: "Amazon.com",
-      symbol: "AMZN",
-      price: "202.11",
-      change: "+1.20%",
-      vol: "38.5M",
-    },
-    {
-      name: "Meta Platforms",
-      symbol: "META",
-      price: "582.01",
-      change: "-0.85%",
-      vol: "14.2M",
-    },
-    {
-      name: "Google Class A",
-      symbol: "GOOGL",
-      price: "188.15",
-      change: "+0.01%",
-      vol: "26.5M",
-    },
-    {
-      name: "Advanced Micro",
-      symbol: "AMD",
-      price: "154.22",
-      change: "-2.15%",
-      vol: "45.1M",
-    },
-    {
-      name: "Palantir Tech",
-      symbol: "PLTR",
-      price: "64.12",
-      change: "+5.42%",
-      vol: "112.4M",
-    },
-  ];
 
   const filteredStocks = stocks.filter(
     (s) =>

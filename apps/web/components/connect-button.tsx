@@ -14,6 +14,9 @@ import {
   DialogDescription,
   DialogFooter,
 } from "./ui/dialog";
+import { useClipboard } from "@/hooks/use-clipboard";
+import { AnimatePresence, motion } from "motion/react";
+import { Check, Copy } from "lucide-react";
 
 interface ConnectButtonProps {
   disabled?: boolean;
@@ -26,6 +29,7 @@ export function ConnectButton({
   className,
   showModalOnMobile = true,
 }: ConnectButtonProps) {
+  const { copy, isCopied } = useClipboard();
   const { wallets } = useWallets();
   const { ready, authenticated, login, logout, user, getAccessToken } =
     usePrivy();
@@ -34,6 +38,11 @@ export function ConnectButton({
   const [walletId, setWalletId] = useState<string | null>(null);
   const [testnetAddress, setTestnetAddress] = useState<string | null>(null);
   const [showWalletModal, setShowWalletModal] = useState(false);
+
+  const handleCopy = async () => {
+    if (!testnetAddress) return;
+    await copy(testnetAddress);
+  };
 
   // Simplified wallet logic - update addresses when authenticated
   React.useEffect(() => {
@@ -79,7 +88,7 @@ export function ConnectButton({
         onClick={handleWalletClick}
         variant="outline"
         disabled={disabled}
-        className={`${className} text-center`}
+        className={`${className} text-center flex items-center gap-2`}
       >
         {testnetAddress
           ? `${testnetAddress.slice(0, 6)}...${testnetAddress.slice(-4)}`
@@ -94,8 +103,42 @@ export function ConnectButton({
                 {testnetAddress && <QRCodeSVG value={testnetAddress} />}
               </div>
               {testnetAddress ? (
-                <div className="font-mono text-sm break-all text-center mt-4">
-                  {testnetAddress}
+                <div className="font-mono text-sm break-all text-center mt-4 flex items-center justify-center gap-2">
+                  {/* use turnicated for mobile */}
+                  <span className="hidden md:block">{testnetAddress}</span>
+                  <span className="md:hidden">
+                    {`${testnetAddress.slice(0, 8)}...${testnetAddress.slice(-6)} `}
+                  </span>
+                  <button
+                    onClick={handleCopy}
+                    className={`p-2 rounded-lg flex items-center justify-center transition-colors hover:bg-gray-800 ${className}`}
+                    disabled={isCopied}
+                    aria-label={isCopied ? "Copied!" : "Copy to clipboard"}
+                  >
+                    <AnimatePresence mode="popLayout" initial={false}>
+                      <motion.div
+                        key={isCopied ? "check" : "copy"}
+                        initial={{
+                          opacity: 0,
+                          scale: 0.25,
+                          filter: "blur(4px)",
+                        }}
+                        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, scale: 0.25, filter: "blur(4px)" }}
+                        transition={{
+                          type: "spring",
+                          duration: 0.3,
+                          bounce: 0,
+                        }}
+                      >
+                        {isCopied ? (
+                          <Check className="w-4 h-4 text-gray-400" />
+                        ) : (
+                          <Copy className="w-4 h-4 text-gray-400" />
+                        )}
+                      </motion.div>
+                    </AnimatePresence>
+                  </button>
                 </div>
               ) : (
                 "Wallet connected"
