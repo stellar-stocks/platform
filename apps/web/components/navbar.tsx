@@ -16,6 +16,8 @@ const NavbarLogo = () => (
 );
 
 const Navbar: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) => {
+  const isMobileCheck = useIsMobile();
+
   const navItems = [
     "Spot",
     "Futures",
@@ -26,7 +28,7 @@ const Navbar: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) => {
     "Onchain",
   ];
 
-  if (isMobile) {
+  if (isMobileCheck) {
     return (
       <nav className="h-12 flex items-center justify-between px-3 border-b border-[#1e2329] bg-[#0b0e11] shrink-0">
         <NavbarLogo />

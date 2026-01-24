@@ -15,15 +15,11 @@ import { useIsMobile } from "@/hooks/use-mobile";
 const App: React.FC = () => {
   const [selectedSymbol, setSelectedSymbol] = useState("NASDAQ:AAPL");
   const [isBottomPanelCollapsed, setIsBottomPanelCollapsed] = useState(false);
-  const isMobile = useIsMobile();
   const currentTicker = selectedSymbol.split(":").pop() || "AAPL";
 
   if (isMobile) {
     return (
       <div className="flex flex-col h-screen overflow-hidden bg-[#0b0e11] text-[#eaecef]">
-        {/* Mobile Navbar */}
-        <Navbar isMobile={true} />
-
         {/* Mobile Asset Switcher */}
         <MarketDrawer
           activeSymbol={selectedSymbol}
@@ -108,7 +104,6 @@ const App: React.FC = () => {
   // Desktop Layout (unchanged)
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-[#0b0e11] text-[#eaecef]">
-      <Navbar />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar
           onSelectSymbol={setSelectedSymbol}

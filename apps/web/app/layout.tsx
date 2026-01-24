@@ -8,6 +8,7 @@ import AppStateProvider from "@/providers/recoil";
 // for reown wallet connection
 import { headers } from "next/headers"; // added
 import ReownContextProvider from "@/context";
+import Navbar from "@/components/navbar";
 
 const Inter = localFont({
   src: "./fonts/inter/Inter-Regular.otf",
@@ -97,6 +98,7 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
       <body className={`${Inter.className} dark`}>
+        <Navbar />
         <AppStateProvider>
           <ReownContextProvider cookies={cookies}>
             <PrivyProviders>{children}</PrivyProviders>
