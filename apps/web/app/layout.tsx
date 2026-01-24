@@ -5,6 +5,10 @@ import "./globals.css";
 import PrivyProviders from "@/providers/privy";
 import AppStateProvider from "@/providers/recoil";
 
+// for reown wallet connection
+import { headers } from "next/headers"; // added
+import ReownContextProvider from "@/context";
+
 const Inter = localFont({
   src: "./fonts/inter/Inter-Regular.otf",
   variable: "--font-inter",
@@ -80,17 +84,23 @@ export const metadata: Metadata = {
     images: ["https://stellarstocks.com"],
   },
 };
-export default function RootLayout({
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersObj = await headers();
+  const cookies = headersObj.get("cookie");
+
   return (
     <html lang="en" suppressHydrationWarning>
       {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
       <body className={`${Inter.className} dark`}>
         <AppStateProvider>
-          <PrivyProviders>{children}</PrivyProviders>
+          <ReownContextProvider cookies={cookies}>
+            <PrivyProviders>{children}</PrivyProviders>
+          </ReownContextProvider>
         </AppStateProvider>
       </body>
     </html>

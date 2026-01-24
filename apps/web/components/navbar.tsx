@@ -19,7 +19,7 @@ const Navbar: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) => {
   const navItems = [
     "Spot",
     "Futures",
-    "TradFi",
+    "Bridge",
     "Bots",
     "Copy",
     "Info",
@@ -48,7 +48,7 @@ const Navbar: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) => {
           {navItems.map((item) => (
             <a
               key={item}
-              href="#"
+              href={`/${item.toLowerCase()}`}
               className="text-sm font-medium hover:text-blue-400 transition-colors"
             >
               {item}
