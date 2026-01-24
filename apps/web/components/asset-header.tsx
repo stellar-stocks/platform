@@ -11,7 +11,7 @@ const AssetHeader: React.FC<AssetHeaderProps> = ({ symbol }) => {
   const ticker = symbol.split(":").pop() || symbol;
 
   return (
-    <div className="h-16 border-b border-[#1e2329] flex items-center px-4 justify-between bg-[#0b0e11]">
+    <div className="h-16 border-b border-[#1e2329] flex items-center px-2 justify-between bg-[#0b0e11]">
       <div className="flex items-center gap-8">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-[#1e2329] border border-[#2b2f36] flex items-center justify-center font-bold text-white text-sm">

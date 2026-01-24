@@ -1,9 +1,21 @@
+"use client";
+
 import React from "react";
 import { ConnectButton } from "./connect-button";
 import { Button } from "./ui/button";
-import { Cog, Download, Globe } from "lucide-react";
+import { Cog, Download, Globe, Menu } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
-const Navbar: React.FC = () => {
+const NavbarLogo = () => (
+  <div className="flex items-center gap-2">
+    <div className="w-5 h-5 bg-white rounded-sm flex items-center justify-center">
+      <div className="w-3 h-3 bg-black transform rotate-45"></div>
+    </div>
+    <span className="text-lg font-bold tracking-tight">Stocks</span>
+  </div>
+);
+
+const Navbar: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) => {
   const navItems = [
     "Spot",
     "Futures",
@@ -14,15 +26,24 @@ const Navbar: React.FC = () => {
     "Onchain",
   ];
 
+  if (isMobile) {
+    return (
+      <nav className="h-12 flex items-center justify-between px-3 border-b border-[#1e2329] bg-[#0b0e11] shrink-0">
+        <NavbarLogo />
+        <div className="flex items-center gap-3">
+          <ConnectButton className="text-xs px-2 py-1" />
+          <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
+            <Menu className="h-4 w-4" />
+          </Button>
+        </div>
+      </nav>
+    );
+  }
+
   return (
     <nav className="h-14 bg-[#181a20] border-b border-[#2b2f36] flex items-center justify-between px-4">
       <div className="flex items-center gap-8">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center font-bold text-white">
-            B
-          </div>
-          <span className="text-xl font-bold tracking-tight">Bitget</span>
-        </div>
+        <NavbarLogo />
         <div className="hidden xl:flex items-center gap-6">
           {navItems.map((item) => (
             <a
@@ -35,19 +56,17 @@ const Navbar: React.FC = () => {
           ))}
         </div>
       </div>
-
       <div className="flex items-center gap-4">
         <ConnectButton />
-
-        <div className="flex items-center gap-1 text-[#848e9c] ml-2">
-          <Button variant={"ghost"}>
-            <Download />
+        <div className="flex items-center gap-1 text-[#848e9c]">
+          <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Download className="h-4 w-4" />
           </Button>
-          <Button variant={"ghost"}>
-            <Globe />
+          <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Globe className="h-4 w-4" />
           </Button>
-          <Button variant={"ghost"}>
-            <Cog />
+          <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Cog className="h-4 w-4" />
           </Button>
         </div>
       </div>

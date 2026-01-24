@@ -85,7 +85,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelectSymbol, activeSymbol }) => {
   );
 
   return (
-    <aside className="w-[280px] hidden md:flex flex-col border-r border-[#1e2329] bg-[#0b0e11]">
+    <aside className="w-[320px] hidden md:flex flex-col border-r border-[#1e2329] bg-[#0b0e11]">
       <div className="p-4">
         <div className="relative group">
           <Input
@@ -120,7 +120,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelectSymbol, activeSymbol }) => {
                 onClick={() => onSelectSymbol(`NASDAQ:${stock.symbol}`)}
                 className={`cursor-pointer hover:bg-[#16181e] group transition-colors ${activeSymbol.includes(stock.symbol) ? "bg-[#16181e]" : ""}`}
               >
-                <td className="px-4 py-4 border-b border-[#1e2329]/30">
+                <td className="px-4 py-2 border-b border-[#1e2329]/30">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-[#1e2329] border border-[#2b2f36] flex items-center justify-center text-[10px] font-bold text-[#eaecef] group-hover:border-[#5e6673] transition-all">
                       {stock.symbol.slice(0, 2)}

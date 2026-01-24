@@ -1,13 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUser, createUser } from "@repo/db/queries";
+import { getUser, createUser, getUserById } from "@repo/db/queries";
 import { AppError } from "@repo/db/errors";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const email = searchParams.get("email");
+  const walletId = searchParams.get("walletId");
+
   try {
-    if (!email) throw new AppError("bad_request:user", "Missing email");
-    const users = await getUser(email);
+    if (!email && !walletId)
+      throw new AppError("bad_request:user", "Missing email or walletId");
+
+    let users;
+    if (walletId) {
+      users = await getUserById(walletId);
+      users = users ? [users] : [];
+    } else {
+      users = await getUser(email?.toString() || "");
+    }
+
     if (!users.length) throw new AppError("not_found:user", "User not found");
     return NextResponse.json(users[0]);
   } catch (error: any) {

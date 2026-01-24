@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     template: "%s | Stellar stocks", // A template for page-specific titles
   },
   description:
-    "We provide tokenized stock trading services for a seamless investment experience. we empower sub saharan africans to invest globally.", // Keep between 150-160 characters
+    "We provide tokenized stock trading services for a seamless investment experience. we empower sub saharan africans to invest globally.",
   keywords: [
     "tokenized stocks",
     "stock trading",
@@ -42,7 +42,22 @@ export const metadata: Metadata = {
     "emerging markets",
     "investment opportunities",
     "financial inclusion",
-  ], // Add relevant keywords
+    "Universal exchange access",
+    "Bitget",
+    "Binance",
+    "Coinbase",
+    "FTX",
+    "ETFs",
+    "stocks",
+    "bonds",
+    "mutual funds",
+    "portfolio management",
+    "financial technology",
+    "digital trading",
+    "asset management",
+    "investment platform",
+    "global markets",
+  ],
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -59,7 +74,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image", // Twitter card type
-    title: "Stellar stocks | Catchy Tagline",
+    title: "Stellar stocks | Tokenized Stock Trading for Sub Saharan Africans", // Twitter title
     description:
       "We provide tokenized stock trading services for a seamless investment experience. we empower sub saharan africans to invest globally.",
     images: ["https://stellarstocks.com"],
@@ -73,7 +88,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
-      <body className={`${Inter.className}`}>
+      <body className={`${Inter.className} dark`}>
         <AppStateProvider>
           <PrivyProviders>{children}</PrivyProviders>
         </AppStateProvider>
