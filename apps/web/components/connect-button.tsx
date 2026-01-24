@@ -99,7 +99,7 @@ export function ConnectButton({
           <DialogHeader>
             <DialogTitle>Connected Wallet</DialogTitle>
             <DialogDescription>
-              <div className="mx-auto w-auto flex items-center justify-center py-2">
+              <div className="mx-auto w-auto flex items-center justify-center py-4 py-8">
                 {testnetAddress && <QRCodeSVG value={testnetAddress} />}
               </div>
               {testnetAddress ? (

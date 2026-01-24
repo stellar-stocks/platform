@@ -100,15 +100,20 @@ const OrderPanel: React.FC = () => {
               <button
                 key={tab}
                 onClick={() => setSide(tab as "buy" | "sell")}
-                className="rounded-sm p-1 flex-1 text-sm relative"
+                className={`${
+                  side === tab ? "" : "hover:text-white/60"
+                } relative rounded-sm flex-1 px-3 py-1.5 text-sm font-medium text-white outline-sky-400 transition focus-visible:outline-2`}
+                style={{
+                  WebkitTapHighlightColor: "transparent",
+                }}
               >
-                <span className="relative z-10">{tab}</span>
-
-                {tab === side && (
+                <span className="relative z-20">{tab}</span>
+                {side === tab && (
                   <motion.span
-                    layoutId="side-indicator"
-                    className={`absolute inset-0 flex-1 rounded-sm transition-all ${side === tab ? (tab === "buy" ? "bg-[#2ebd85] text-white shadow-lg" : "bg-[#f6465d] text-white shadow-lg") : "text-[#848e9c] hover:text-white -z-1"}`}
-                  ></motion.span>
+                    layoutId="bubble"
+                    className={`absolute inset-0 z-10 rounded-sm ${side === "buy" ? "bg-green-600" : "bg-red-500"}`}
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.2 }}
+                  />
                 )}
               </button>
             ))}
@@ -192,7 +197,7 @@ const OrderPanel: React.FC = () => {
 
                 {/* Slider Progress Fill */}
                 <div
-                  className="absolute h-[4px] bg-white rounded-full z-10"
+                  className="absolute h-[4px] bg-gradient-to-r from-green-500 to-red-600 rounded-full z-10"
                   style={{ width: `${percentage}%` }}
                 ></div>
 

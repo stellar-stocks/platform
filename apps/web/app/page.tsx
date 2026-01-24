@@ -81,7 +81,7 @@ const App: React.FC = () => {
         </div>
 
         {/* Mobile Floating Action Buttons - Higher z-index */}
-        <div className="p-3 bg-[#0b0e11] border-t border-[#1e2329] flex gap-2 shrink-0 z-100">
+        <div className="p-3 bg-[#0b0e11] border-t border-[#1e2329] flex gap-2 shrink-0">
           <MobileOrderDrawer
             initialSide="buy"
             symbol={currentTicker}
