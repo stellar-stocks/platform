@@ -99,9 +99,9 @@ export function ConnectButton({
           <DialogHeader>
             <DialogTitle>Connected Wallet</DialogTitle>
             <DialogDescription>
-              <div className="mx-auto w-auto flex items-center justify-center py-4 py-8">
+              <span className="mx-auto w-auto flex items-center justify-center py-4 py-8">
                 {testnetAddress && <QRCodeSVG value={testnetAddress} />}
-              </div>
+              </span>
               {testnetAddress ? (
                 <div className="font-mono text-sm break-all text-center mt-4 flex items-center justify-center gap-2">
                   {/* use turnicated for mobile */}
