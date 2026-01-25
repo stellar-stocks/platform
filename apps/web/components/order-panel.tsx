@@ -5,6 +5,8 @@ import { usePrivy } from "@privy-io/react-auth";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 
+import { motion } from "motion/react";
+
 const OrderPanel: React.FC = () => {
   const [quantity, setQuantity] = useState<number>(0);
   const [limitPrice, setLimitPrice] = useState<string>("3348.33");
@@ -75,7 +77,7 @@ const OrderPanel: React.FC = () => {
   return (
     <div className="bg-[#0b0e11] p-4 space-y-4">
       {/* Order Type Selector */}
-      <div className="flex gap-2">
+      {/* <div className="flex gap-2">
         <button
           onClick={() => setOrderType("market")}
           className={`flex-1 py-2 px-3 rounded-lg text-sm font-bold transition-all ${
@@ -96,32 +98,36 @@ const OrderPanel: React.FC = () => {
         >
           Limit
         </button>
-      </div>
+      </div> */}
 
       {/* Side Selector */}
-      <div className="flex gap-2">
-        <button
-          onClick={() => setSide("buy")}
-          className={`flex-1 py-2 px-3 rounded-lg text-sm font-bold transition-all ${
-            side === "buy"
-              ? "bg-[#2ebd85] text-white"
-              : "bg-[#1e2329] text-[#848e9c]"
-          }`}
-        >
-          Buy
-        </button>
-        <button
-          onClick={() => setSide("sell")}
-          className={`flex-1 py-2 px-3 rounded-lg text-sm font-bold transition-all ${
-            side === "sell"
-              ? "bg-[#f6465d] text-white"
-              : "bg-[#1e2329] text-[#848e9c]"
-          }`}
-        >
-          Sell
-        </button>
+      <div className="flex gap-1 bg-[#1e2329]/50 rounded-lg p-1 relative">
+        {[
+          { id: "buy", label: "Buy", color: "#2ebd85" },
+          { id: "sell", label: "Sell", color: "#f6465d" },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setSide(tab.id as "buy" | "sell")}
+            className={`relative flex-1 py-2 px-3 rounded-md text-sm font-bold transition-all z-10 ${
+              side === tab.id
+                ? "text-white"
+                : "text-[#848e9c] hover:text-white/60"
+            }`}
+            style={{ WebkitTapHighlightColor: "transparent" }}
+          >
+            {side === tab.id && (
+              <motion.span
+                layoutId="activeTab"
+                className="absolute inset-0 rounded-md"
+                style={{ backgroundColor: tab.color }}
+                transition={{ type: "spring", bounce: 0.2, duration: 0.2 }}
+              />
+            )}
+            <span className="relative z-10">{tab.label}</span>
+          </button>
+        ))}
       </div>
-
       {/* Limit Price Input - Only show for limit orders */}
       {orderType === "limit" && (
         <div className="group relative">
@@ -193,7 +199,9 @@ const OrderPanel: React.FC = () => {
             : "bg-[#f6465d] hover:bg-[#d03a4d] text-white"
         } ${quantity <= 0 || isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
       >
-        {isLoading ? "Loading..." : `${side === "buy" ? "Buy" : "Sell"} ${side === "buy" ? "/" : ""}${side === "buy" ? "Long" : "Short"}`}
+        {isLoading
+          ? "Loading..."
+          : `${side === "buy" ? "Buy" : "Sell"} ${side === "buy" ? "/" : ""}${side === "buy" ? "Long" : "Short"}`}
       </Button>
 
       {/* KYC Verification Modal */}

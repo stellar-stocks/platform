@@ -7,17 +7,12 @@
     "dev": "next dev -p 3000 --webpack",
     "build": "next build --webpack",
     "start": "next start -p 3000",
-    "pages:build": "pnpm run build && pnpm exec opennextjs-cloudflare build",
-    "preview": "pnpm run pages:build && pnpm exec wrangler pages dev .open-next",
-    "deploy": "pnpm run pages:build && pnpm exec wrangler pages deploy .open-next",
     "lint": "eslint . --ext .ts,.tsx",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@alpacahq/alpaca-trade-api": "^3.1.3",
-    "@cloudflare/next-on-pages": "^1.15.0",
     "@hookform/resolvers": "^5.2.2",
-    "@opennextjs/cloudflare": "^1.15.1",
     "@privy-io/js-sdk-core": "^0.54.2",
     "@privy-io/react-auth": "^2.25.0",
     "@privy-io/server-auth": "^1.32.5",
