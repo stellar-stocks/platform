@@ -1,23 +1,22 @@
 const nextConfig = {
-  // Force pnpm overrides to work during resolution
-  experimental: {
-    esmExternals: "loose",
-    serverComponentsExternalPackages: ["@scure/bip32", "@noble/hashes"],
-  },
+  // Move serverComponentsExternalPackages from experimental to top level
+  serverExternalPackages: ["@scure/bip32", "@noble/hashes"],
+  // Remove deprecated experimental options
   webpack: (config, { isServer, nextRuntime }) => {
     if (!isServer) {
       config.resolve.alias = {
         ...config.resolve.alias,
-        // Noble hashes fix (your first error)
+        // Noble hashes fix
         "@noble/hashes/_assert": false,
-        // Lucide icons fix (this error)
+        // Lucide icons fix
         "lucide-react/dist/esm/icons/index.js": false,
         "lucide-react/dist/esm/icons": false,
       };
     }
     return config;
   },
-  turbopack: false,
+  // Add empty turbopack config to silence the error
+  turbopack: {},
 };
 
 export default nextConfig;

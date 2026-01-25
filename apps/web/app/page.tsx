@@ -14,6 +14,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Stock, stocks } from "@/utils/constants";
 import { Footer } from "react-day-picker";
 import MobileAssetHeader from "@/components/mobile-asset-header";
+import { Button } from "@/components/ui/button";
 
 const App: React.FC = () => {
   const isMobile = useIsMobile();
@@ -69,24 +70,24 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile Floating Action Buttons - Higher z-index */}
+        {/* Mobile Floating Action ButtonHigher z-index */}
         <div className="p-3 bg-[#0b0e11] border-t border-[#1e2329] flex gap-2 shrink-0">
           <MobileOrderDrawer
             initialSide="buy"
             selectedStock={selectedStock}
             trigger={
-              <button className="flex-1 bg-[#2ebd85] hover:bg-[#26a672] text-white font-bold py-3 rounded text-sm transition-colors shadow-lg shadow-green-900/10">
+              <Button className="flex-1 bg-[#2ebd85] hover:bg-[#26a672] text-white font-bold py-3 rounded text-sm transition-colors shadow-lg shadow-green-900/10">
                 Buy / Long
-              </button>
+              </Button>
             }
           />
           <MobileOrderDrawer
             initialSide="sell"
             selectedStock={selectedStock}
             trigger={
-              <button className="flex-1 bg-[#f6465d] hover:bg-[#d03a4d] text-white font-bold py-3 rounded text-sm transition-colors shadow-lg shadow-red-900/10">
+              <Button className="flex-1 bg-[#f6465d] hover:bg-[#d03a4d] text-white font-bold py-3 rounded text-sm transition-colors shadow-lg shadow-red-900/10">
                 Sell / Short
-              </button>
+              </Button>
             }
           />
         </div>

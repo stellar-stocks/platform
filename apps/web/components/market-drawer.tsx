@@ -173,7 +173,7 @@ export const MarketDrawer: React.FC<MarketDrawerProps> = ({
                   No symbols found
                 </p>
                 <p className="text-[10px] text-center mt-1">
-                  Try searching "AAPL", "BTC", etc.
+                  Try searching "AAPL", "AMZN", "TSLA", "MSFT", etc.
                 </p>
               </div>
             )}

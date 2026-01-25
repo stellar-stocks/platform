@@ -9,6 +9,7 @@ import AppStateProvider from "@/providers/recoil";
 import { headers } from "next/headers"; // added
 import ReownContextProvider from "@/context";
 import Navbar from "@/components/navbar";
+import AppSidebar from "@/components/app-sidebar";
 
 const Inter = localFont({
   src: "./fonts/inter/Inter-Regular.otf",
@@ -104,6 +105,8 @@ export default async function RootLayout({
           <ReownContextProvider cookies={cookies}>
             <PrivyProviders>
               <Navbar />
+               <AppSidebar
+                />
               {children}
             </PrivyProviders>
           </ReownContextProvider>

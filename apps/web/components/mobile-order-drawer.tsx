@@ -3,11 +3,9 @@
 import React from "react";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
-  DrawerOverlay,
-  DrawerPortal,
   DrawerTrigger,
+  DrawerTitle,
 } from "@/components/ui/drawer";
 import OrderPanel from "./order-panel";
 import AssetHeader from "./asset-header";
@@ -27,13 +25,13 @@ export const MobileOrderDrawer: React.FC<MobileOrderDrawerProps> = ({
     <Drawer>
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
       <DrawerContent className="bg-[#0b0e11] flex flex-col rounded-t-[20px] max-h-[96%] fixed bottom-0 left-0 right-0 z-50 border-t border-[#1e2329] outline-none">
+        {/* Hidden DrawerTitle for accessibility */}
+        <DrawerTitle className="sr-only">
+          Order Panel - {selectedStock?.symbol || 'Select Stock'}
+        </DrawerTitle>
         <div className="bg-[#0b0e11] rounded-t-[20px] flex-1 overflow-y-auto no-scrollbar pb-8">
-          <div className="">
-            <AssetHeader selectedStock={selectedStock} />
-          </div>
-          <div className="px-1">
-            <OrderPanel />
-          </div>
+          <AssetHeader selectedStock={selectedStock} />
+          <OrderPanel />
           {/* Account Summaries - Matches the visual style of the screenshot */}
           <div className="px-5 mt-4 space-y-4 border-t border-[#1e2329] pt-6">
             <div>
