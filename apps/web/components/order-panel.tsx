@@ -1,11 +1,186 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import { usePrivy } from "@privy-io/react-auth";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
+
+// interface DiamondSliderProps {
+//   value: number;
+//   min: number;
+//   max: number;
+//   onChange: (value: number) => void;
+//   step?: number;
+//   markerSize?: number;
+// }
+
+// const DiamondSlider: React.FC<DiamondSliderProps> = ({
+//   value,
+//   min,
+//   max,
+//   onChange,
+//   step = 1,
+//   markerSize = 6, // Much smaller markers
+// }) => {
+//   const trackRef = useRef<HTMLDivElement>(null);
+//   const [isDragging, setIsDragging] = useState(false);
+
+//   // Padding for the track ends so the thumb doesn't overlap the steppers
+//   const SIDE_PADDING = 12;
+
+//   const markers = useMemo(() => [0, 25, 50, 75, 100], []);
+
+//   const updateValueFromCoord = useCallback(
+//     (clientX: number) => {
+//       if (!trackRef.current) return;
+//       const rect = trackRef.current.getBoundingClientRect();
+
+//       const innerWidth = rect.width - SIDE_PADDING * 2;
+//       const relativeX = clientX - (rect.left + SIDE_PADDING);
+
+//       const clampedX = Math.max(0, Math.min(relativeX, innerWidth));
+//       const percentage = clampedX / innerWidth;
+
+//       const rawValue = min + percentage * (max - min);
+//       const steppedValue = Math.round(rawValue / step) * step;
+
+//       onChange(Math.max(min, Math.min(max, steppedValue)));
+//     },
+//     [min, max, step, onChange],
+//   );
+
+//   const handleMouseDown = (e: React.MouseEvent) => {
+//     setIsDragging(true);
+//     updateValueFromCoord(e.clientX);
+//   };
+
+//   const handleTouchStart = (e: React.TouchEvent) => {
+//     if (!e.touches || e.touches.length === 0) return;
+//     setIsDragging(true);
+//     updateValueFromCoord(e.touches[0].clientX);
+//   };
+
+//   useEffect(() => {
+//     const handleMouseMove = (e: MouseEvent) => {
+//       if (isDragging) {
+//         updateValueFromCoord(e.clientX);
+//       }
+//     };
+
+//     const handleMouseUp = () => setIsDragging(false);
+
+//     if (isDragging) {
+//       window.addEventListener("mousemove", handleMouseMove);
+//       window.addEventListener("mouseup", handleMouseUp);
+//     }
+
+//     return () => {
+//       window.removeEventListener("mousemove", handleMouseMove);
+//       window.removeEventListener("mouseup", handleMouseUp);
+//     };
+//   }, [isDragging, updateValueFromCoord]);
+
+//   const percentage = ((value - min) / (max - min)) * 100;
+
+//   const springConfig = {
+//     type: "spring",
+//     stiffness: 1000,
+//     damping: 60,
+//     mass: 0.4,
+//   } as const;
+//   const tooltipSpring = {
+//     type: "spring",
+//     stiffness: 1500,
+//     damping: 70,
+//     mass: 0.2,
+//   } as const;
+
+//   return (
+//     <div className="w-full select-none space-y-4" id="precision-slider">
+//       <div className="flex items-center gap-3">
+//         {/* Compact Slider Track */}
+//         <div
+//           ref={trackRef}
+//           className={`relative flex-1 h-10 flex items-center bg-[#0d0d0d] border border-white/5 rounded-lg ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
+//           onMouseDown={handleMouseDown}
+//           onTouchStart={handleTouchStart}
+//           style={{ paddingLeft: SIDE_PADDING, paddingRight: SIDE_PADDING }}
+//         >
+//           <div className="relative w-full h-[2px]">
+//             {/* Background Rail */}
+//             <div className="absolute inset-0 bg-white/5 rounded-full" />
+
+//             {/* Progress Overlay */}
+//             <motion.div
+//               className="absolute inset-y-0 left-0 bg-white/20 rounded-full z-0"
+//               animate={{ width: `${percentage}%` }}
+//               transition={springConfig}
+//             />
+
+//             {/* Micro Markers */}
+//             <div className="absolute inset-0 pointer-events-none">
+//               {markers.map((m) => (
+//                 <div
+//                   key={m}
+//                   style={{
+//                     left: `${m}%`,
+//                     width: markerSize,
+//                     height: markerSize,
+//                     transform: "translate(-50%, -50%) rotate(45deg)",
+//                     top: "50%",
+//                   }}
+//                   className={`absolute border transition-colors duration-300 ${value >= m ? "bg-white/40 border-white/40" : "bg-transparent border-white/10"}`}
+//                 />
+//               ))}
+//             </div>
+
+//             {/* Compact Tooltip */}
+//             <AnimatePresence>
+//               {isDragging && (
+//                 <motion.div
+//                   initial={{ opacity: 0, y: 10, scale: 0.9 }}
+//                   animate={{ opacity: 1, y: -45, scale: 1 }}
+//                   exit={{ opacity: 0, y: 10, scale: 0.9 }}
+//                   transition={tooltipSpring}
+//                   style={{ left: `${percentage}%`, x: "-50%" }}
+//                   className="absolute flex flex-col items-center pointer-events-none z-30"
+//                 >
+//                   <div className="bg-white text-black text-[10px] font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap uppercase tracking-tighter">
+//                     {value}%
+//                   </div>
+//                   <div className="w-[1px] h-2 bg-white/50 mt-1" />
+//                 </motion.div>
+//               )}
+//             </AnimatePresence>
+
+//             {/* Compact Thumb */}
+//             <motion.div
+//               className="absolute z-10 pointer-events-none"
+//               animate={{ left: `${percentage}%` }}
+//               transition={springConfig}
+//               style={{ x: "-50%", top: "50%", y: "-50%" }}
+//             >
+//               <motion.div
+//                 animate={{ rotate: 45, scale: isDragging ? 1.2 : 1 }}
+//                 className="w-4 h-4 bg-white border border-white shadow-[0_0_12px_rgba(255,255,255,0.3)] flex items-center justify-center"
+//               >
+//                 <div className="w-1 h-1 bg-black rounded-full" />
+//               </motion.div>
+//             </motion.div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
 const OrderPanel: React.FC = () => {
   const [quantity, setQuantity] = useState<number>(0);
@@ -129,7 +304,7 @@ const OrderPanel: React.FC = () => {
         ))}
       </div>
       {/* Limit Price Input - Only show for limit orders */}
-      {orderType === "limit" && (
+      {/* {orderType === "limit" && (
         <div className="group relative">
           <div className="bg-[#1e2329] border border-[#2b2f36] group-focus-within:border-[#5e6673] rounded-xl p-3 transition-all">
             <div className="flex justify-between items-center mb-1">
@@ -149,7 +324,7 @@ const OrderPanel: React.FC = () => {
             />
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Quantity Input */}
       <div className="group relative">
