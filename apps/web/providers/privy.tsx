@@ -38,7 +38,7 @@ export default function PrivyProviders({
           },
         ],
         appearance: {
-          theme: "light",
+          theme: "dark",
           accentColor: "#10b981", // Emerald green for trust
           logo: "/logo.svg",
         },
