@@ -1,9 +1,15 @@
 "use client";
 import { CandlestickChart, LineChart } from "lucide-react";
 import React, { useEffect, useRef, memo, useState } from "react";
+
+import { Stock } from "@/utils/constants";
 import { Button } from "./ui/button";
 
-function TradingViewWidget({ symbol = "NASDAQ:AAPL" }) {
+function TradingViewWidget({
+  selectedStock,
+}: {
+  selectedStock: Stock | undefined;
+}) {
   const container = useRef<HTMLDivElement>(null);
   const [interval, setInterval] = useState("D");
   const [chartType, setChartType] = useState("1"); // 1=candles, 0=bars, 2=line, 8=area
@@ -48,7 +54,7 @@ function TradingViewWidget({ symbol = "NASDAQ:AAPL" }) {
         "locale": "en",
         "save_image": true,
         "style": "${chartType}",
-        "symbol": "${symbol}",
+        "symbol": "${selectedStock?.symbol}",
         "theme": "dark",
         "timezone": "Etc/UTC",
         "backgroundColor": "#0F0F0F",
@@ -72,7 +78,7 @@ function TradingViewWidget({ symbol = "NASDAQ:AAPL" }) {
         }
       }
     };
-  }, [interval, symbol, chartType]);
+  }, [interval, selectedStock?.symbol, chartType]);
 
   return (
     <div className="flex flex-col h-full w-full">

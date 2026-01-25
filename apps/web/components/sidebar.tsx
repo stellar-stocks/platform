@@ -1,81 +1,82 @@
 "use client";
 
 import React, { useState } from "react";
-import { Input } from "./ui/input";
 import { Search } from "lucide-react";
 import { stocks } from "@/utils/constants";
+import Image from "next/image";
+import { Stock } from "@/utils/constants";
 
 interface SidebarProps {
+  selectedStock: Stock | null;
   onSelectSymbol: (symbol: string) => void;
-  activeSymbol: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onSelectSymbol, activeSymbol }) => {
+const Sidebar: React.FC<SidebarProps> = ({ selectedStock, onSelectSymbol }) => {
   const [search, setSearch] = useState("");
 
   const filteredStocks = stocks.filter(
-    (s) =>
-      s.name.toLowerCase().includes(search.toLowerCase()) ||
-      s.symbol.toLowerCase().includes(search.toLowerCase()),
+    (stock) =>
+      stock.symbol.toLowerCase().includes(search.toLowerCase()) ||
+      stock.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
-    <aside className="w-[320px] hidden md:flex flex-col border-r border-[#1e2329] bg-[#0b0e11]">
-      <div className="p-4">
-        <div className="relative group">
-          <Input
+    <div className="w-84 bg-[#0b0e11] border-r border-[#1e2329] flex flex-col">
+      <div className="p-4 border-b border-[#1e2329]">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <input
             type="text"
-            placeholder="Search markets"
-            className="w-full bg-[#1e2329] border border-[#2b2f36] group-focus-within:border-[#5e6673] rounded-xl px-9 py-2 text-[13px] outline-none placeholder-[#474d57] transition-all text-white"
+            placeholder="Search stocks..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 bg-[#1e2329] border border-[#2b2f36] rounded-lg text-sm focus:outline-none focus:border-blue-500"
           />
-          <span className="absolute left-1.5 top-1.5 text-[#474d57]">
-            <Search />
-          </span>
         </div>
       </div>
 
-      <div className="flex items-center gap-6 px-4 py-2 border-b border-[#1e2329] text-[11px] font-bold text-[#848e9c] uppercase tracking-wider">
-        <button className="text-white border-b-2 border-white pb-2 transition-all">
-          All
-        </button>
-        <button className="hover:text-white pb-2 transition-all">
-          S&P 500
-        </button>
-        <button className="hover:text-white pb-2 transition-all">Nasdaq</button>
-      </div>
-
-      <div className="flex-1 overflow-y-auto no-scrollbar">
-        <table className="w-full text-left">
-          <tbody className="text-xs">
+      <div className="flex-1 overflow-y-auto">
+        <table className="w-full">
+          <thead>
+            <tr className="text-left text-xs text-gray-400 border-b border-[#1e2329]">
+              <th className="px-4 py-2">Symbol</th>
+              <th className="px-4 py-2">Price</th>
+              <th className="px-4 py-2">Change</th>
+            </tr>
+          </thead>
+          <tbody>
             {filteredStocks.map((stock) => (
               <tr
                 key={stock.symbol}
                 onClick={() => onSelectSymbol(`NASDAQ:${stock.symbol}`)}
-                className={`cursor-pointer hover:bg-[#16181e] group transition-colors ${activeSymbol.includes(stock.symbol) ? "bg-[#16181e]" : ""}`}
+                className={`cursor-pointer hover:bg-[#16181e] group transition-colors ${
+                  selectedStock?.symbol === stock.symbol ? "bg-[#16181e]" : ""
+                }`}
               >
                 <td className="px-4 py-2 border-b border-[#1e2329]/30">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-[#1e2329] border border-[#2b2f36] flex items-center justify-center text-[10px] font-bold text-[#eaecef] group-hover:border-[#5e6673] transition-all">
-                      {stock.symbol.slice(0, 2)}
-                    </div>
+                    <Image
+                      src={`/icons/${stock.icon}`}
+                      alt={stock.name}
+                      width={24}
+                      height={24}
+                    />
                     <div>
-                      <div className="font-bold text-[#eaecef] tracking-tight">
-                        {stock.symbol}
-                      </div>
-                      <div className="text-[10px] text-[#474d57] font-medium">
-                        {stock.vol}
-                      </div>
+                      <div className="font-medium text-sm">{stock.symbol}</div>
+                      <div className="text-xs text-gray-400">{stock.name}</div>
                     </div>
                   </div>
                 </td>
-                <td className="px-4 py-4 text-right border-b border-[#1e2329]/30">
-                  <div className="font-bold text-[#eaecef] tracking-tight">
-                    ${stock.price}
-                  </div>
+                <td className="px-4 py-2 border-b border-[#1e2329]/30">
+                  <div className="text-sm font-medium">{stock.price}</div>
+                </td>
+                <td className="px-4 py-2 border-b border-[#1e2329]/30">
                   <div
-                    className={`text-[10px] font-bold ${stock.change.startsWith("+") ? "text-[#2ebd85]" : "text-[#f6465d]"}`}
+                    className={`text-sm font-medium ${
+                      stock.change.startsWith("+")
+                        ? "text-green-500"
+                        : "text-red-500"
+                    }`}
                   >
                     {stock.change}
                   </div>
@@ -85,7 +86,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelectSymbol, activeSymbol }) => {
           </tbody>
         </table>
       </div>
-    </aside>
+    </div>
   );
 };
 

@@ -1,22 +1,28 @@
 "use client";
 
 import React from "react";
-import { ConnectButton } from "./connect-button";
+import Image from "next/image";
+import { Stock } from "@/utils/constants";
 
 interface AssetHeaderProps {
-  symbol: string;
+  selectedStock: Stock | undefined;
 }
 
-const AssetHeader: React.FC<AssetHeaderProps> = ({ symbol }) => {
-  const ticker = symbol.split(":").pop() || symbol;
+const AssetHeader: React.FC<AssetHeaderProps> = ({ selectedStock }) => {
+  const ticker =
+    selectedStock?.symbol.split(":").pop() || selectedStock?.symbol || "";
 
   return (
     <div className="h-16 border-b border-[#1e2329] flex items-center px-2 justify-between ">
       <div className="flex items-center justify-between gap-8 w-full lg:w-auto">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-[#1e2329] border border-[#2b2f36] flex items-center justify-center font-bold text-white text-sm">
-            {ticker.charAt(0)}
-          </div>
+          <Image
+            className="mx-3"
+            src={`/icons/${selectedStock?.icon}`}
+            alt={ticker}
+            width={32}
+            height={32}
+          />
           <div>
             <div className="flex items-center gap-2">
               <span className="text-lg font-bold tracking-tight text-[#eaecef]">
@@ -32,7 +38,7 @@ const AssetHeader: React.FC<AssetHeaderProps> = ({ symbol }) => {
           </div>
         </div>
 
-        <div className="flex gap-10 ml-2">
+        <div className="flex gap-10 ml-4">
           <div>
             <div className="text-lg font-bold text-[#2ebd85]">$228.24</div>
             <div className="text-[11px] text-[#2ebd85] font-bold flex items-center gap-1">

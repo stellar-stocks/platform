@@ -11,17 +11,17 @@ import {
 } from "@/components/ui/drawer";
 import OrderPanel from "./order-panel";
 import AssetHeader from "./asset-header";
+import { Stock } from "@/utils/constants";
 
 interface MobileOrderDrawerProps {
   trigger: React.ReactNode;
   initialSide: "buy" | "sell";
-  symbol: string;
+  selectedStock: Stock | undefined;
 }
 
 export const MobileOrderDrawer: React.FC<MobileOrderDrawerProps> = ({
   trigger,
-  initialSide,
-  symbol,
+  selectedStock,
 }) => {
   return (
     <Drawer>
@@ -29,7 +29,7 @@ export const MobileOrderDrawer: React.FC<MobileOrderDrawerProps> = ({
       <DrawerContent className="bg-[#0b0e11] flex flex-col rounded-t-[20px] max-h-[96%] fixed bottom-0 left-0 right-0 z-50 border-t border-[#1e2329] outline-none">
         <div className="bg-[#0b0e11] rounded-t-[20px] flex-1 overflow-y-auto no-scrollbar pb-8">
           <div className="">
-            <AssetHeader symbol={symbol} />
+            <AssetHeader selectedStock={selectedStock} />
           </div>
           <div className="px-1">
             <OrderPanel />

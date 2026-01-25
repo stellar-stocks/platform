@@ -13,13 +13,13 @@ import { Input } from "./ui/input";
 
 interface MarketDrawerProps {
   onSelectSymbol: (symbol: string) => void;
-  activeSymbol: string;
+  activeStock?: Stock;
   trigger: React.ReactNode;
 }
 
 export const MarketDrawer: React.FC<MarketDrawerProps> = ({
   onSelectSymbol,
-  activeSymbol,
+  activeStock,
   trigger,
 }) => {
   const [searchText, setSearchText] = React.useState("");
@@ -111,15 +111,19 @@ export const MarketDrawer: React.FC<MarketDrawerProps> = ({
                       )
                     }
                     className={`flex items-center p-2 rounded-lg transition-colors w-full text-left ${
-                      activeSymbol.includes(m.symbol)
+                      activeStock?.symbol === m.symbol
                         ? "bg-[#1e2329]"
                         : "hover:bg-[#1e2329]/50"
                     }`}
                   >
                     <div className="flex-1 flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[#2b2f36] flex items-center justify-center text-blue-400 font-bold text-xs border border-blue-500/10">
-                        {m.symbol.charAt(0)}
-                      </div>
+                      <img
+                        className="mx-3"
+                        src={`/icons/${m.icon}`}
+                        alt={m.symbol}
+                        width={32}
+                        height={32}
+                      />
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
                           <span className="font-bold text-sm">{m.symbol}</span>
