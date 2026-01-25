@@ -18,15 +18,7 @@ const NavbarLogo = () => (
 const Navbar: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) => {
   const isMobileCheck = useIsMobile();
 
-  const navItems = [
-    "Spot",
-    "Futures",
-    "Bridge",
-    "Bots",
-    "Copy",
-    "Info",
-    "Onchain",
-  ];
+  const navItems = ["Spot", "Bridge", "Bots", "Copy", "Info", "Onchain"];
 
   if (isMobileCheck) {
     return (
