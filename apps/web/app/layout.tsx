@@ -97,7 +97,9 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
-      <body className={`${Inter.className} dark`}>
+      <body
+        className={`${Inter.className} dark h-screen w-screen overflow-hidden flex flex-col`}
+      >
         <AppStateProvider>
           <ReownContextProvider cookies={cookies}>
             <PrivyProviders>

@@ -19,7 +19,7 @@ const App: React.FC = () => {
 
   if (isMobile) {
     return (
-      <div className="flex flex-col h-screen overflow-hidden bg-[#0b0e11] text-[#eaecef]">
+      <div className="flex flex-col flex-1 overflow-hidden bg-[#0b0e11] text-[#eaecef]">
         {/* Mobile Asset Switcher */}
         <MarketDrawer
           activeSymbol={selectedSymbol}
