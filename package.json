@@ -2,8 +2,8 @@
   "name": "stellar-stocks",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
-    "dev": "dotenv -e ../../.env.local -- turbo run dev",
+    "build": "pnpm turbo build --filter=web",
+    "dev": "dotenv -e ../../.env.local -- pnpm turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
