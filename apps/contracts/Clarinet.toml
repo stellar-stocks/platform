@@ -33,7 +33,9 @@ epoch = 'latest'
 [contracts.perp-engine]
 path = 'contracts/perp-engine.clar'
 clarity_version = 3
-epoch = '3.2'
+epoch = 'latest'
+
+
 [repl.analysis]
 passes = ['check_checker']
 
