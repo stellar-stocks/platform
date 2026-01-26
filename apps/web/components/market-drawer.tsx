@@ -70,7 +70,7 @@ export const MarketDrawer: React.FC<MarketDrawerProps> = ({
               value={searchText}
               onChange={handleSearchChange}
               type="text"
-              placeholder="Search symbols (AAPL, BTC...)"
+              placeholder="Search symbols (AAPL, TSLA...)"
               className="w-full bg-[#1e2329] border-none rounded-lg pl-10 pr-4 py-2.5 text-sm outline-none placeholder-[#848e9c]"
             />
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#848e9c]">
@@ -118,7 +118,6 @@ export const MarketDrawer: React.FC<MarketDrawerProps> = ({
                   >
                     <div className="flex-1 flex items-center gap-3">
                       <img
-                        className="mx-3"
                         src={`/icons/${m.icon}`}
                         alt={m.symbol}
                         width={32}

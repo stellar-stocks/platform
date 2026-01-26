@@ -1,3 +1,4 @@
+import { ChevronDown } from "lucide-react";
 import React from "react";
 
 interface MobileAssetHeaderProps {
@@ -40,6 +41,23 @@ const MobileAssetHeader: React.FC<MobileAssetHeaderProps> = ({
               Nasdaq Global Select
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col items-end justify-center">
+        <div className="text-lg font-bold text-[#2ebd85]">$228.24</div>
+        <div className="text-[11px] text-[#2ebd85] font-bold flex items-center gap-1">
+          <svg
+            width="10"
+            height="10"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3"
+          >
+            <polyline points="18 15 12 9 6 15" />
+          </svg>
+          +1.10%
         </div>
       </div>
     </div>

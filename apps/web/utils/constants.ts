@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, useState, useCallback } from "react";
+
 export type Stock = {
   name: string;
   icon: string;
@@ -8,6 +12,8 @@ export type Stock = {
   marketCap: string;
   contractAddress: string;
   leverage: string;
+  realTimePrice?: number;
+  realTimeChange?: number;
 };
 
 export const stocks: Stock[] = [
@@ -46,7 +52,7 @@ export const stocks: Stock[] = [
   },
   {
     name: "Amazon.com",
-    icon: "amazon.svg",
+    icon: "amazon.png",
     symbol: "AMZN",
     price: "202.11",
     change: "+1.20%",
@@ -69,24 +75,16 @@ export const stocks: Stock[] = [
 ];
 
 export const config = {
-  // Public Ethereum Sepolia RPC and your private wallet key
   ETH_RPC_URL: process.env.RPC_URL || "https://ethereum-sepolia.publicnode.com",
   PRIVATE_KEY: process.env.PRIVATE_KEY,
-
-  // Contract addresses on testnet
   X_RESERVE_CONTRACT: "008888878f94C0d87defdf0B07f46B93C1934442",
   ETH_USDC_CONTRACT: "1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
-
-  // Deposit parameters for Stacks
-  STACKS_DOMAIN: 10003, // Stacks domain ID
-  STACKS_RECIPIENT: "YOUR_STACKS_TESTNET_ADDRESS", // Address to receive minted USDCx on Stacks
+  STACKS_DOMAIN: 10003,
+  STACKS_RECIPIENT: "YOUR_STACKS_TESTNET_ADDRESS",
   DEPOSIT_AMOUNT: "1.00",
   MAX_FEE: "0",
 };
 
-// --snip--
-
-// ============ Contract ABIs ============
 const X_RESERVE_ABI = [
   {
     name: "depositToRemote",
