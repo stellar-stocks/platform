@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getPrivyServerClient } from "@/utils/privy-server-client";
+import { getPrivyServerClient } from "@/lib/privy-server-client";
 
 // GET /api/wallet-owners
 export async function GET(request: NextRequest) {

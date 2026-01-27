@@ -4,7 +4,7 @@ import React, { useEffect, useRef, memo, useState } from "react";
 
 import { motion } from "motion/react";
 
-import { Stock } from "@/utils/constants";
+import { Stock } from "@/lib/constants";
 import { Button } from "./ui/button";
 
 function TradingViewWidget({

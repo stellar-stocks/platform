@@ -1,7 +1,7 @@
 // Placeholder for actual contract interaction logic
 import { NextRequest } from "next/server";
-import { getPrivyServerClient } from "@/utils/privy-server-client";
-import { broadcastWithRecoveryTesting } from "@/utils/stacks";
+import { getPrivyServerClient } from "@/lib/privy-server-client";
+import { broadcastWithRecoveryTesting } from "@/lib/stacks";
 import {
   makeUnsignedContractCall,
   createMessageSignature,

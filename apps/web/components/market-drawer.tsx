@@ -8,7 +8,7 @@ import {
   DrawerPortal,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Stock, stocks } from "@/utils/constants";
+import { Stock, stocks } from "@/lib/constants";
 import { Input } from "./ui/input";
 
 interface MarketDrawerProps {

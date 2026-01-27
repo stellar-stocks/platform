@@ -1,4 +1,4 @@
-import { getPrivyServerClient } from "@/utils/privy-server-client";
+import { getPrivyServerClient } from "@/lib/privy-server-client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {

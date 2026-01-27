@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { Stock } from "@/utils/constants";
+import { Stock } from "@/lib/constants";
 
 interface AssetHeaderProps {
   selectedStock: Stock | undefined;

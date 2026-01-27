@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/drawer";
 import OrderPanel from "./order-panel";
 import AssetHeader from "./asset-header";
-import { Stock } from "@/utils/constants";
+import { Stock } from "@/lib/constants";
 
 interface MobileOrderDrawerProps {
   trigger: React.ReactNode;

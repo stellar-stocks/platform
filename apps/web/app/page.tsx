@@ -11,7 +11,7 @@ import { MobileOrderDrawer } from "@/components/mobile-order-drawer";
 import TradingViewChart from "@/components/trading-view-chart";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-import { Stock, stocks } from "@/utils/constants";
+import { Stock, stocks } from "@/lib/constants";
 import { Footer } from "react-day-picker";
 import MobileAssetHeader from "@/components/mobile-asset-header";
 import { Button } from "@/components/ui/button";

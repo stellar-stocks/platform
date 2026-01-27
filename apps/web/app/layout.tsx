@@ -2,12 +2,12 @@ import React from "react";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import PrivyProviders from "@/providers/privy";
-import AppStateProvider from "@/providers/recoil";
+import PrivyProviders from "@/context/privy";
+import AppStateProvider from "@/context/recoil";
 
 // for reown wallet connection
 import { headers } from "next/headers"; // added
-import ReownContextProvider from "@/context";
+import ReownContextProvider from "@/context/reown";
 import Navbar from "@/components/navbar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";

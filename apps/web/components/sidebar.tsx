@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import { Search } from "lucide-react";
-import { stocks } from "@/utils/constants";
+import { stocks } from "@/lib/constants";
 import Image from "next/image";
-import { Stock } from "@/utils/constants";
+import { Stock } from "@/lib/constants";
 
 interface SidebarProps {
   selectedStock: Stock | null;
