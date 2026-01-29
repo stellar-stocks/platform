@@ -5,14 +5,10 @@ import { ConnectButton } from "./connect-button";
 import { Button } from "./ui/button";
 import { Cog, Download, Globe, Menu } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import Image from "next/image";
 
 const NavbarLogo = () => (
-  <a href="/" className="flex items-center gap-2">
-    <div className="w-5 h-5 bg-white rounded-sm flex items-center justify-center">
-      <div className="w-3 h-3 bg-black transform rotate-45"></div>
-    </div>
-    <span className="text-lg font-bold tracking-tight">Stocks</span>
-  </a>
+  <Image src="/logo.svg" alt="Logo" width={32} height={32} />
 );
 
 const Navbar: React.FC<{ isMobile?: boolean }> = ({ isMobile = false }) => {

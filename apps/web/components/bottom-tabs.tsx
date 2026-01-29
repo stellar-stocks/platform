@@ -1,6 +1,9 @@
 "use client";
 
+import { motion } from "motion/react";
 import React, { useState } from "react";
+import { Button } from "./ui/button";
+import { ChevronDown } from "lucide-react";
 
 interface BottomTabsProps {
   isCollapsed: boolean;
@@ -24,7 +27,8 @@ const BottomTabs: React.FC<BottomTabsProps> = ({
       <div className="flex items-center justify-between px-4 h-8 shrink-0 border-b border-[#1e2329]">
         <div className="flex items-center gap-4 h-full flex-1 overflow-hidden">
           {tabs.map((tab) => (
-            <button
+            <Button
+              variant="ghost"
               key={tab.name}
               onClick={(e) => {
                 e.stopPropagation();
@@ -34,19 +38,24 @@ const BottomTabs: React.FC<BottomTabsProps> = ({
                   onToggleCollapse();
                 }
               }}
-              className={`text-[10px] font-bold h-full border-b-2 transition-all flex items-center px-1 flex-shrink-0 ${
+              className={`relative font-bold h-full transition-all flex items-center px-1 flex-shrink-0 ${
                 activeTab === tab.name
-                  ? "text-white border-blue-500"
-                  : "text-[#848e9c] border-transparent hover:text-white"
+                  ? "text-white"
+                  : "text-[#848e9c] hover:text-white"
               }`}
             >
-              <span className="truncate">{tab.name}</span>
-              {tab.count !== null && (
-                <span className="ml-1 opacity-60 text-[9px]">
-                  ({tab.count})
-                </span>
+              <span className="relative z-10 text-[12px]">{tab.name}</span>
+
+              {activeTab === tab.name && (
+                <>
+                  <motion.span
+                    layoutId="active-bottom-tab"
+                    className="absolute inset-x-0 bottom-0 h-[2px] bg-blue-500"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.2 }}
+                  />
+                </>
               )}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -58,54 +67,30 @@ const BottomTabs: React.FC<BottomTabsProps> = ({
           className="p-1 hover:bg-[#1e2329] rounded text-[#848e9c] hover:text-white transition-all flex-shrink-0"
           title={isCollapsed ? "Expand" : "Collapse"}
         >
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            className={`transition-transform duration-300 ${
-              isCollapsed ? "rotate-180" : ""
-            }`}
-          >
-            <path d="m6 9 6 6 6-6" />
-          </svg>
+          <motion.div animate={{ rotate: isCollapsed ? 180 : 0 }}>
+            <ChevronDown size={16} />
+          </motion.div>
         </button>
       </div>
 
       {/* Content Area */}
       {!isCollapsed && (
         <>
-          <div className="flex-1 flex flex-col items-center justify-center text-[#848e9c] p-3 min-h-[150px]">
-            <div className="p-3 rounded-xl bg-[#1e2329]/50 mb-2">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                className="opacity-20"
-              >
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                <line x1="3" y1="9" x2="21" y2="9" />
-                <line x1="9" y1="21" x2="9" y2="9" />
-              </svg>
-            </div>
-            <p className="text-[10px] font-medium tracking-wide">
-              No records found
-            </p>
-          </div>
-
-          <div className="px-3 py-1.5 border-t border-[#1e2329] flex items-center gap-2 bg-[#0d0f13]">
-            <button className="text-[9px] font-bold px-2 py-1 bg-[#1e2329] rounded-md text-white border border-[#2b2f36] hover:bg-[#2b2f36] transition-colors flex-1">
-              Market (0)
-            </button>
-            <button className="text-[9px] font-bold px-2 py-1 text-[#848e9c] hover:text-white transition-colors">
-              Limit/TP/SL (0)
-            </button>
-          </div>
+          <Button variant="ghost" size="icon" className="font-medium">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              className="opacity-20"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <line x1="3" y1="9" x2="21" y2="9" />
+              <line x1="9" y1="21" x2="9" y2="9" />
+            </svg>
+          </Button>
         </>
       )}
     </div>
