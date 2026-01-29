@@ -69,6 +69,11 @@ plan:
             path: contracts/traits.clar
             clarity-version: 3
         - emulated-contract-publish:
+            contract-name: mock-usdcx
+            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            path: contracts/mock-usdcx.clar
+            clarity-version: 3
+        - emulated-contract-publish:
             contract-name: collateral-vault
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             path: contracts/collateral-vault.clar
@@ -92,5 +97,10 @@ plan:
             contract-name: perp-engine
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             path: contracts/perp-engine.clar
+            clarity-version: 3
+        - emulated-contract-publish:
+            contract-name: tesla-stock
+            emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
+            path: contracts/tesla-stock.clar
             clarity-version: 3
       epoch: "3.2"

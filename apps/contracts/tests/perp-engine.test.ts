@@ -10,9 +10,17 @@ describe("Perp Engine", () => {
     // 1. Setup: Mint collateral to wallet1
     const mintAmount = 10000000; // 10 tokens
     simnet.callPublicFn(
-      "collateral-vault",
+      "mock-usdcx",
       "mint",
-      [Cl.standardPrincipal(wallet1), Cl.uint(mintAmount)],
+      [Cl.uint(mintAmount), Cl.standardPrincipal(wallet1)],
+      deployer,
+    );
+
+    // Set allowed engine
+    simnet.callPublicFn(
+      "collateral-vault",
+      "set-allowed-engine",
+      [Cl.contractPrincipal(deployer, "perp-engine")],
       deployer,
     );
 

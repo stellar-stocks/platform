@@ -1,4 +1,4 @@
-(impl-trait 'SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE.sip-010-trait-ft-standard.sip-010-trait)
+(impl-trait .traits.sip-010-trait)
 
 ;; Tesla Stock Token (6 decimals = micro-shares)
 (define-fungible-token tesla-stock)
@@ -6,8 +6,8 @@
 ;; USDCX SIP-010 Interface
 (define-trait usdcx-trait
   (
-    (transfer (uint principal principal (optional (buff 34))) (response bool bool))
-    (get-balance (principal) (uint))
+    (transfer (uint principal principal (optional (buff 34))) (response bool uint))
+    (get-balance (principal) (response uint uint))
   )
 )
 
@@ -20,7 +20,7 @@
 (define-constant TOKEN_NAME "Tesla Stock")
 (define-constant TOKEN_SYMBOL "TSLA")
 (define-constant TOKEN_DECIMALS u6)
-(define-constant USDCX_TOKEN 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.usdcx)
+(define-constant USDCX_TOKEN .mock-usdcx)
 (define-constant TSLA_PRICE_USDC u449000000)  ;; 1 TSLA = $449 USDC (6 decimals)
 
 ;; Storage
@@ -36,7 +36,7 @@
 (define-read-only (get-decimals) (ok TOKEN_DECIMALS))
 (define-read-only (get-token-uri) (ok (some (var-get token-uri))))
 
-;; 📊 Tesla Dashboard
+;; Tesla Dashboard
 (define-read-only (get-tesla-market)
   (ok {
     price_per_tsla: TSLA_PRICE_USDC,
@@ -46,12 +46,12 @@
   })
 )
 
-;; 🔥 MAIN FUNCTION: Send USDC → Get Exact TSLA Worth $449/share
+;; MAIN FUNCTION: Send USDC  Get Exact TSLA Worth $449/share
 (define-public (buy-tsla-with-usdc (usdc-amount uint))
   (let
     (
       (buyer tx-sender)
-      (tsla-shares (/ (* u1000000 usdc-amount) TSLA_PRICE_USDC))  ;; Convert USDC → TSLA
+      (tsla-shares (/ (* u1000000 usdc-amount) TSLA_PRICE_USDC))  ;; Convert USDC to TSLA
     )
     (begin
       ;; Validate minimum purchase (0.001 TSLA)
@@ -60,7 +60,7 @@
       
       ;; Transfer USDC from buyer to contract
       (try! (contract-call? 
-        USDCX_TOKEN 
+        .mock-usdcx
         transfer 
         usdc-amount 
         buyer 
@@ -85,7 +85,7 @@
   )
 )
 
-;; 💰 Owner withdraw USDC treasury
+;; Owner withdraw USDC treasury
 (define-public (withdraw-treasury (amount uint))
   (begin
     (asserts! (is-eq tx-sender CONTRACT_OWNER) ERR_OWNER_ONLY)
@@ -93,7 +93,7 @@
     
     (try! (as-contract 
       (contract-call? 
-        USDCX_TOKEN 
+        .mock-usdcx
         transfer 
         amount 
         (as-contract tx-sender) 

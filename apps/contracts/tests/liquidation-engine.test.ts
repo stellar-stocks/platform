@@ -10,9 +10,17 @@ describe("Liquidation Engine", () => {
     // 1. Setup
     const mintAmount = 100000000;
     simnet.callPublicFn(
-      "collateral-vault",
+      "mock-usdcx",
       "mint",
-      [Cl.standardPrincipal(wallet1), Cl.uint(mintAmount)],
+      [Cl.uint(mintAmount), Cl.standardPrincipal(wallet1)],
+      deployer,
+    );
+
+    // Set allowed engine
+    simnet.callPublicFn(
+      "collateral-vault",
+      "set-allowed-engine",
+      [Cl.contractPrincipal(deployer, "perp-engine")],
       deployer,
     );
 

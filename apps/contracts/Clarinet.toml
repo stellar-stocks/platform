@@ -10,6 +10,16 @@ path = 'contracts/traits.clar'
 clarity_version = 3
 epoch = '3.2'
 
+[contracts.mock-usdcx]
+path = 'contracts/mock-usdcx.clar'
+clarity_version = 3
+epoch = '3.2'
+
+[contracts.tesla-stock]
+path = 'contracts/tesla-stock.clar'
+clarity_version = 3
+epoch = '3.2'
+
 [contracts.collateral-vault]
 path = 'contracts/collateral-vault.clar'
 clarity_version = 3
