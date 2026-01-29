@@ -175,7 +175,7 @@ const OrderPanel: React.FC = () => {
                 layoutId="activeTab"
                 className={cn(
                   "absolute inset-0 rounded-lg z-0",
-                  side === "buy" ? "bg-[#2ebd85]" : "bg-[#f6465d]"
+                  buttonVariants({ variant: side === "buy" ? "success" : "destructive" }).toString()
                 )}
                 transition={{ type: "spring", bounce: 0.2, duration: 0.2 }}
               />

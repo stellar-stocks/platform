@@ -108,7 +108,10 @@ const App: React.FC = () => {
             initialSide="buy"
             selectedStock={selectedStock}
             trigger={
-              <Button className="flex-1 bg-[#2ebd85] hover:bg-[#26a672] text-white font-bold py-3 rounded text-sm transition-colors shadow-lg shadow-green-900/10">
+              <Button 
+              className="flex-1"
+              variant={"success"}
+              >
                 Buy / Long
               </Button>
             }
@@ -117,7 +120,10 @@ const App: React.FC = () => {
             initialSide="sell"
             selectedStock={selectedStock}
             trigger={
-              <Button className="flex-1 bg-[#f6465d] hover:bg-[#d03a4d] text-white font-bold py-3 rounded text-sm transition-colors shadow-lg shadow-red-900/10">
+              <Button
+              className="flex-1"
+              variant={"destructive"}
+              > 
                 Sell / Short
               </Button>
             }
