@@ -187,6 +187,22 @@ clarinet integrate
 clarinet deploy --testnet
 ```
 
+### Deployed Contracts (Testnet)
+
+> **Deployer:** `STQ5PKGBZWPGX7P50RKXP18C37K39V5KSHE133R3`
+> **Network:** https://api.testnet.hiro.so
+
+| Contract | Address |
+| :--- | :--- |
+| **traits** | `STQ5PKGBZWPGX7P50RKXP18C37K39V5KSHE133R3.traits` |
+| **mock-usdcx** | `STQ5PKGBZWPGX7P50RKXP18C37K39V5KSHE133R3.mock-usdcx` |
+| **collateral-vault** | `STQ5PKGBZWPGX7P50RKXP18C37K39V5KSHE133R3.collateral-vault` |
+| **dia-oracle-wrapper** | `STQ5PKGBZWPGX7P50RKXP18C37K39V5KSHE133R3.dia-oracle-wrapper` |
+| **funding-settler** | `STQ5PKGBZWPGX7P50RKXP18C37K39V5KSHE133R3.funding-settler` |
+| **liquidation-engine** | `STQ5PKGBZWPGX7P50RKXP18C37K39V5KSHE133R3.liquidation-engine` |
+| **perp-engine** | `STQ5PKGBZWPGX7P50RKXP18C37K39V5KSHE133R3.perp-engine` |
+| **tesla-stock** | `STQ5PKGBZWPGX7P50RKXP18C37K39V5KSHE133R3.tesla-stock` |
+
 ---
 
 ## 📊 Trading Flow

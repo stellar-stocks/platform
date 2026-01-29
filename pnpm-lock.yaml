@@ -45,10 +45,13 @@ importers:
     dependencies:
       '@hirosystems/clarinet-sdk':
         specifier: ^3.0.2
-        version: 3.8.1
+        version: 3.8.1(encoding@0.1.13)
       '@pythnetwork/hermes-client':
         specifier: ^2.1.0
         version: 2.1.0(axios@1.13.3)
+      '@stacks/network':
+        specifier: ^7.3.1
+        version: 7.3.1(encoding@0.1.13)
       '@stacks/transactions':
         specifier: ^7.0.6
         version: 7.3.1(encoding@0.1.13)
@@ -72,7 +75,7 @@ importers:
         version: 3.2.4(@types/debug@4.1.12)(@types/node@22.19.7)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)
       vitest-environment-clarinet:
         specifier: ^2.3.0
-        version: 2.6.0(@hirosystems/clarinet-sdk@3.8.1)(vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.19.7)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
+        version: 2.6.0(@hirosystems/clarinet-sdk@3.8.1(encoding@0.1.13))(vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.19.7)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
     devDependencies:
       '@types/cors':
         specifier: ^2.8.19
@@ -11465,7 +11468,7 @@ snapshots:
 
   '@hirosystems/clarinet-sdk-wasm@3.8.1': {}
 
-  '@hirosystems/clarinet-sdk@3.8.1':
+  '@hirosystems/clarinet-sdk@3.8.1(encoding@0.1.13)':
     dependencies:
       '@hirosystems/clarinet-sdk-wasm': 3.8.1
       '@stacks/transactions': 7.3.1(encoding@0.1.13)
@@ -21180,9 +21183,9 @@ snapshots:
       tsx: 4.21.0
       yaml: 2.8.2
 
-  vitest-environment-clarinet@2.6.0(@hirosystems/clarinet-sdk@3.8.1)(vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.19.7)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)):
+  vitest-environment-clarinet@2.6.0(@hirosystems/clarinet-sdk@3.8.1(encoding@0.1.13))(vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.19.7)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)):
     dependencies:
-      '@hirosystems/clarinet-sdk': 3.8.1
+      '@hirosystems/clarinet-sdk': 3.8.1(encoding@0.1.13)
       vitest: 3.2.4(@types/debug@4.1.12)(@types/node@22.19.7)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)
 
   vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.19.7)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2):

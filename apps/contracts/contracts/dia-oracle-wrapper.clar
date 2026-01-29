@@ -8,6 +8,18 @@
     (print { type: "oracle-update", symbol: symbol, price: price })
     (ok true)))
 
+(define-public (set-multiple-prices (entries (list 10 (tuple (symbol (string-ascii 12)) (price uint)))))
+  (begin
+    (map set-price-iter entries)
+    (ok true)))
+
+(define-private (set-price-iter (entry (tuple (symbol (string-ascii 12)) (price uint))))
+  (let ((symbol (get symbol entry))
+        (price (get price entry)))
+    (map-set prices { symbol: symbol } price)
+    (map-set timestamps { symbol: symbol } burn-block-height)
+    (print { type: "oracle-update", symbol: symbol, price: price })))
+
 (define-read-only (get-latest-price (symbol (string-ascii 12)))
   (default-to u0 (map-get? prices { symbol: symbol })))
 

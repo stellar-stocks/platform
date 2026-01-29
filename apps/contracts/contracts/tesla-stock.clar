@@ -21,7 +21,7 @@
 (define-constant TOKEN_SYMBOL "TSLA")
 (define-constant TOKEN_DECIMALS u6)
 (define-constant USDCX_TOKEN .mock-usdcx)
-(define-constant TSLA_PRICE_USDC u449000000)  ;; 1 TSLA = $449 USDC (6 decimals)
+;; (define-constant TSLA_PRICE_USDC u449000000)  ;; Removed static price
 
 ;; Storage
 (define-data-var token-uri (string-utf8 256) u"https://tesla.com")
@@ -36,10 +36,16 @@
 (define-read-only (get-decimals) (ok TOKEN_DECIMALS))
 (define-read-only (get-token-uri) (ok (some (var-get token-uri))))
 
+(define-read-only (get-price)
+  (let ((oracle-price (contract-call? .dia-oracle-wrapper get-latest-price "TSLA")))
+    (if (> oracle-price u0) 
+        oracle-price 
+        u44900000000))) ;; Fallback/Default if oracle is 0 (approx $449)
+
 ;; Tesla Dashboard
 (define-read-only (get-tesla-market)
   (ok {
-    price_per_tsla: TSLA_PRICE_USDC,
+    price_per_tsla: (get-price),
     treasury_usdc: (var-get total-usdcx-treasury),
     total_shares: (ft-get-supply tesla-stock),
     shares_circulation: (var-get total-tsla-circulation)
@@ -51,10 +57,25 @@
   (let
     (
       (buyer tx-sender)
-      (tsla-shares (/ (* u1000000 usdc-amount) TSLA_PRICE_USDC))  ;; Convert USDC to TSLA
+      (current-price (get-price))
+      ;; Price is 8 decimals (from Oracle, e.g. 44900000000 => $449.00)
+      ;; USDC is 6 decimals.
+      ;; TSLA is 6 decimals.
+      ;; Value in USD = (usdc-amount / 1e6)
+      ;; TSLA shares = (Value / Price)
+      ;; Calculation:
+      ;; tsla-shares = (usdc-amount * 10^8) / price
+      ;; wait, price is e.g. 449 * 10^8.
+      ;; if 1 USDC (1e6), expected 1/449 shares.
+      ;; 1e6 * 1e8 / (449 * 1e8) = 1e6 / 449 = 2227 micro-shares (0.002227 TSLA). Correct.
+      ;; 
+      ;; Adjusted for 6 decimal output:
+      ;; shares = usdc_amount * 10^8 / price
+      
+      (tsla-shares (/ (* usdc-amount u100000000) current-price))
     )
     (begin
-      ;; Validate minimum purchase (0.001 TSLA)
+      ;; Validate minimum purchase (0.001 TSLA => 1000 units)
       (asserts! (> usdc-amount u1000000) ERR_INVALID_AMOUNT)  ;; Min $1 USDC
       (asserts! (> tsla-shares u1000) ERR_INVALID_AMOUNT)     ;; Min 0.001 TSLA
       
@@ -78,8 +99,8 @@
       (ok {
         usdc_received: usdc-amount,
         tsla_minted: tsla-shares,
-        tsla_per_usdc: (/ tsla-shares usdc-amount),
-        shares_worth: (* tsla-shares (/ TSLA_PRICE_USDC u1000000))
+        tsla_per_usdc: (/ (* tsla-shares u1000000) usdc-amount), ;; scaled for display
+        shares_worth: (* tsla-shares (/ current-price u100000000)) ;; price normalized to dollars
       })
     )
   )

@@ -1,0 +1,67 @@
+---
+id: 0
+name: Testnet deployment
+network: testnet
+stacks-node: "https://api.testnet.hiro.so"
+bitcoin-node: "http://blockstack:blockstacksystem@bitcoind.testnet.stacks.co:18332"
+plan:
+  batches:
+    - id: 0
+      transactions:
+        - contract-publish:
+            contract-name: traits
+            expected-sender: STQ5PKGBZWPGX7P50RKXP18C37K39V5KSHE133R3
+            cost: 11950
+            path: "contracts\\traits.clar"
+            anchor-block-only: true
+            clarity-version: 3
+        - contract-publish:
+            contract-name: mock-usdcx
+            expected-sender: STQ5PKGBZWPGX7P50RKXP18C37K39V5KSHE133R3
+            cost: 9020
+            path: "contracts\\mock-usdcx.clar"
+            anchor-block-only: true
+            clarity-version: 3
+        - contract-publish:
+            contract-name: collateral-vault
+            expected-sender: STQ5PKGBZWPGX7P50RKXP18C37K39V5KSHE133R3
+            cost: 12610
+            path: "contracts\\collateral-vault.clar"
+            anchor-block-only: true
+            clarity-version: 3
+        - contract-publish:
+            contract-name: dia-oracle-wrapper
+            expected-sender: STQ5PKGBZWPGX7P50RKXP18C37K39V5KSHE133R3
+            cost: 13040
+            path: "contracts\\dia-oracle-wrapper.clar"
+            anchor-block-only: true
+            clarity-version: 3
+        - contract-publish:
+            contract-name: funding-settler
+            expected-sender: STQ5PKGBZWPGX7P50RKXP18C37K39V5KSHE133R3
+            cost: 5380
+            path: "contracts\\funding-settler.clar"
+            anchor-block-only: true
+            clarity-version: 3
+        - contract-publish:
+            contract-name: liquidation-engine
+            expected-sender: STQ5PKGBZWPGX7P50RKXP18C37K39V5KSHE133R3
+            cost: 12660
+            path: "contracts\\liquidation-engine.clar"
+            anchor-block-only: true
+            clarity-version: 3
+        - contract-publish:
+            contract-name: perp-engine
+            expected-sender: STQ5PKGBZWPGX7P50RKXP18C37K39V5KSHE133R3
+            cost: 51450
+            path: "contracts\\perp-engine.clar"
+            anchor-block-only: true
+            clarity-version: 3
+        - contract-publish:
+            contract-name: tesla-stock
+            expected-sender: STQ5PKGBZWPGX7P50RKXP18C37K39V5KSHE133R3
+            cost: 46920
+            path: "contracts\\tesla-stock.clar"
+            anchor-block-only: true
+            clarity-version: 3
+      epoch: "3.2"
