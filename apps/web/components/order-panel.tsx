@@ -30,7 +30,7 @@ const OrderPanel: React.FC = () => {
   const { user } = usePrivy();
 
   // Slider constants
-  const TICKS = [0, 10, 25, 50, 75, 100];
+  const TICKS = [0, 25, 50, 75, 100];
   const SNAP_THRESHOLD = 3;
   const min = 0;
   const max = 100;
@@ -232,16 +232,16 @@ const OrderPanel: React.FC = () => {
       {/* Slider with Percentage Input */}
       <div
         className="flex items-center gap-4 w-full select-none"
-        style={{ "--thumb-color": colors.thumb } as React.CSSProperties}
+        style={{ "--thumb-color": colors.thumb, "--thumb-size": "8px" } as React.CSSProperties}
       >
-        <div className="relative flex-1 h-12 flex items-center">
+        <div className="relative flex-1 h-8 flex items-center">
           {/* Static Background Track */}
           <div
             className={`absolute inset-0 top-1/2 -translate-y-1/2 h-[10px] w-full ${colors.trackBase} rounded-full border border-white/5`}
           >
             {/* Fading Progress Fill - Right to Left gradient (hottest at thumb) */}
             <div
-              className={`absolute left-0 top-0 h-full ${colors.trackFill} rounded-full transition-all duration-75 ease-out opacity-90`}
+              className={`absolute left-0 top-0 h-full ${colors.trackFill} rounded-full opacity-90`}
               style={{ width: `${percentage}%` }}
             />
           </div>
@@ -251,7 +251,7 @@ const OrderPanel: React.FC = () => {
             {TICKS.map((tick) => (
               <div
                 key={tick}
-                className={`w-[2px] h-[14px] rounded-full transition-colors duration-200 ${
+                className={`w-[4px] h-[14px] rounded-full ${
                   tick <= percentage ? "bg-white/40" : "bg-white/10"
                 }`}
               />
@@ -265,7 +265,7 @@ const OrderPanel: React.FC = () => {
             step={1}
             value={percentage}
             onChange={handleSliderChange}
-            className="custom-range relative z-10 w-full h-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[var(--thumb-color)] [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:transition-all [&::-webkit-slider-thumb]:hover:scale-110 [&::-webkit-slider-thumb]:active:scale-95"
+            className="custom-range relative z-10 w-full h-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[var(--thumb-color)] [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:transition-all [&::-webkit-slider-thumb]:hover:scale-110 [&::-webkit-slider-thumb]:active:scale-95"
           />
         </div>
       </div>

@@ -46,7 +46,7 @@ const AssetHeader: React.FC<AssetHeaderProps> = ({ selectedStock }) => {
     : "1.12B"; // Keep hardcoded fallback or make it "---"
 
   return (
-    <div className="h-16 border-b border-[#1e2329] flex items-center px-2 justify-between ">
+    <div className="h-16 flex items-center px-2 justify-between ">
       <div className="flex items-center justify-between gap-8 w-full lg:w-auto">
         <div className="flex items-center gap-3">
           <Image
