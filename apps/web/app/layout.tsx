@@ -3,14 +3,13 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import PrivyProviders from "@/context/privy";
-import AppStateProvider from "@/context/recoil";
+import AppStateProvider from "@/context/app-state";
 
 // for reown wallet connection
 import { headers } from "next/headers"; // added
 import ReownContextProvider from "@/context/reown";
 import Navbar from "@/components/navbar";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import MarketDataProvider from "@/context/market-data-provider";
 
 const Inter = localFont({
   src: "./fonts/inter/Inter-Regular.otf",
@@ -103,15 +102,14 @@ export default async function RootLayout({
         className={`${Inter.className} dark h-screen w-screen overflow-hidden flex flex-col`}
       >
         <AppStateProvider>
-          <ReownContextProvider cookies={cookies}>
-            <PrivyProviders>
-              <Navbar />
-              {/* <SidebarProvider>
-                <AppSidebar />
-              </SidebarProvider> */}
-              {children}
-            </PrivyProviders>
-          </ReownContextProvider>
+          <MarketDataProvider>
+            <ReownContextProvider cookies={cookies}>
+              <PrivyProviders>
+                <Navbar />
+                {children}
+              </PrivyProviders>
+            </ReownContextProvider>
+          </MarketDataProvider>
         </AppStateProvider>
       </body>
     </html>

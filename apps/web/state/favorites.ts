@@ -1,6 +1,3 @@
-import { atom } from "recoil";
+import { atom } from "jotai";
 
-export const favoritesState = atom<string[]>({
-  key: "favoritesState",
-  default: [],
-});
+export const favoritesState = atom<string[]>([]);

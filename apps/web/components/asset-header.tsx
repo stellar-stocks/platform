@@ -3,14 +3,47 @@
 import React from "react";
 import Image from "next/image";
 import { Stock } from "@/lib/constants";
+import { useAtomValue } from "jotai";
+import { stockDataState } from "@/state/stock-data";
 
 interface AssetHeaderProps {
   selectedStock: Stock | undefined;
 }
 
 const AssetHeader: React.FC<AssetHeaderProps> = ({ selectedStock }) => {
+  const stockDataMap = useAtomValue(stockDataState);
+  
   const ticker =
     selectedStock?.symbol.split(":").pop() || selectedStock?.symbol || "";
+
+  const data = stockDataMap[ticker];
+
+  const price = data?.price 
+    ? `$${data.price.toFixed(2)}` 
+    : selectedStock?.price 
+      ? `$${selectedStock.price}` 
+      : "---";
+
+  const changePercent = data?.changePercent
+    ? data.changePercent
+    : parseFloat(selectedStock?.change?.replace("%", "") || "0");
+    
+  const isPositive = changePercent >= 0;
+  
+  const changeFormatted = `${isPositive ? "+" : ""}${changePercent.toFixed(2)}%`;
+  
+  const volume = data?.volume 
+    ? (data.volume / 1000000).toFixed(2) + "M"
+    : selectedStock?.vol || "---";
+
+  const marketCap = data?.marketCap
+    ? (data.marketCap / 1000000000000).toFixed(2) + "T" // Assuming T for trillions if data is huge, but let's just stick to what was there or format nicely.
+    : selectedStock?.marketCap || "---";
+
+  // Alpaca might not give OI. Use placeholder or 0 if missing.
+  const openInterest = data?.openInterest
+    ? (data.openInterest / 1000000000).toFixed(2) + "B"
+    : "1.12B"; // Keep hardcoded fallback or make it "---"
 
   return (
     <div className="h-16 border-b border-[#1e2329] flex items-center px-2 justify-between ">
@@ -40,8 +73,8 @@ const AssetHeader: React.FC<AssetHeaderProps> = ({ selectedStock }) => {
 
         <div className="flex gap-10 ml-4">
           <div>
-            <div className="text-lg font-bold text-[#2ebd85]">$228.24</div>
-            <div className="text-[11px] text-[#2ebd85] font-bold flex items-center gap-1">
+            <div className={`text-lg font-bold ${isPositive ? "text-[#2ebd85]" : "text-[#f6465d]"}`}>{price}</div>
+            <div className={`text-[11px] font-bold flex items-center gap-1 ${isPositive ? "text-[#2ebd85]" : "text-[#f6465d]"}`}>
               <svg
                 width="10"
                 height="10"
@@ -49,29 +82,30 @@ const AssetHeader: React.FC<AssetHeaderProps> = ({ selectedStock }) => {
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="3"
+                className={!isPositive ? "rotate-180" : ""}
               >
                 <polyline points="18 15 12 9 6 15" />
               </svg>
-              +1.10%
+              {changeFormatted}
             </div>
           </div>
           <div className="hidden lg:block">
             <div className="text-[10px] text-[#848e9c] uppercase font-bold tracking-wider mb-0.5">
               Volume
             </div>
-            <div className="text-sm font-semibold text-[#eaecef]">52.41M</div>
+            <div className="text-sm font-semibold text-[#eaecef]">{volume}</div>
           </div>
           <div className="hidden lg:block">
             <div className="text-[10px] text-[#848e9c] uppercase font-bold tracking-wider mb-0.5">
               Mkt Cap
             </div>
-            <div className="text-sm font-semibold text-[#eaecef]">3.46T</div>
+            <div className="text-sm font-semibold text-[#eaecef]">{marketCap}</div>
           </div>
           <div className="hidden xl:block">
             <div className="text-[10px] text-[#848e9c] uppercase font-bold tracking-wider mb-0.5">
               OI
             </div>
-            <div className="text-sm font-semibold text-[#eaecef]">1.12B</div>
+            <div className="text-sm font-semibold text-[#eaecef]">{openInterest}</div>
           </div>
         </div>
       </div>

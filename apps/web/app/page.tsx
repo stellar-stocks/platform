@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "@/components/sidebar";
 import OrderPanel from "@/components/order-panel";
 import TradeHistory from "@/components/trading-history";
@@ -10,26 +10,58 @@ import { MarketDrawer } from "@/components/market-drawer";
 import { MobileOrderDrawer } from "@/components/mobile-order-drawer";
 import TradingViewChart from "@/components/trading-view-chart";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAtom, useAtomValue } from "jotai";
+// Updated imports to point to central recoil.ts state
+import { selectedStockState, stockDataState } from "@/state/recoil";
 
-import { Stock, stocks } from "@/lib/constants";
+import { stocks } from "@/lib/constants";
 import { Footer } from "react-day-picker";
 import MobileAssetHeader from "@/components/mobile-asset-header";
 import { Button } from "@/components/ui/button";
+// Import the new hook
+import { useAlpacaMarketData } from "@/hooks/use-realtime-data";
 
 const App: React.FC = () => {
   const isMobile = useIsMobile();
-  const [selectedStock, setSelectedStock] = useState<Stock | undefined>(
-    stocks[0],
-  );
+  const [selectedStockSymbol, setSelectedStockSymbol] = useAtom(selectedStockState);
+  const liveStockData = useAtomValue(stockDataState);
   const [isBottomPanelCollapsed, setIsBottomPanelCollapsed] = useState(false);
+
+  // Initialize Alpaca WebSocket Connection
+  useAlpacaMarketData();
+
+  // Initialize selected stock if not set
+  useEffect(() => {
+    if (!selectedStockSymbol && stocks.length > 0) {
+      setSelectedStockSymbol(stocks[0]?.symbol ?? "");
+    }
+  }, [selectedStockSymbol, setSelectedStockSymbol]);
+
+  // Find static metadata
+  const baseSelectedStock = stocks.find((s) => s.symbol === selectedStockSymbol) || stocks[0];
+  
+  // Merge static metadata with live Alpaca data
+  // If live data exists for this symbol within `liveStockData`, we overlay it
+  const liveSymbolData = baseSelectedStock ? liveStockData[baseSelectedStock.symbol] : undefined;
+
+  const selectedStock = baseSelectedStock ? {
+    ...baseSelectedStock,
+    ...(liveSymbolData ? {
+      price: String(liveSymbolData.price),
+      change: String(liveSymbolData.change),
+      changePercent: liveSymbolData.changePercent,
+      volume: liveSymbolData.volume,
+      high: liveSymbolData.high,
+      low: liveSymbolData.low,
+    } : {})
+  } : undefined;
 
   const currentTicker = selectedStock?.symbol || "AAPL";
 
   const handleSelectSymbol = (symbol: string) => {
     // Extract stock symbol from full symbol (e.g., "NASDAQ:AAPL" -> "AAPL")
     const stockSymbol = symbol.split(":").pop() || symbol;
-    const stock = stocks.find((s) => s.symbol === stockSymbol);
-    setSelectedStock(stock);
+    setSelectedStockSymbol(stockSymbol);
   };
 
   if (isMobile) {

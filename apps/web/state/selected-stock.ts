@@ -1,6 +1,3 @@
-import { atom } from "recoil";
+import { atom } from "jotai";
 
-export const selectedStockState = atom<string | null>({
-  key: "selectedStockState",
-  default: null,
-});
+export const selectedStockState = atom<string | null>(null);

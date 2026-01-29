@@ -1,6 +1,3 @@
-import { atom } from "recoil";
+import { atom } from "jotai";
 
-export const userAddressState = atom<string | null>({
-  key: "userAddressState",
-  default: null,
-});
+export const userAddressState = atom<string | null>(null);
