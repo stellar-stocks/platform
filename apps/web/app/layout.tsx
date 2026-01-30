@@ -10,6 +10,7 @@ import { headers } from "next/headers"; // added
 import ReownContextProvider from "@/context/reown";
 import Navbar from "@/components/navbar";
 import MarketDataProvider from "@/context/market-data-provider";
+import { StacksConnectionProvider } from "@/components/connect-button";
 
 const Inter = localFont({
   src: "./fonts/inter/Inter-Regular.otf",
@@ -104,10 +105,10 @@ export default async function RootLayout({
         <AppStateProvider>
           <MarketDataProvider>
             <ReownContextProvider cookies={cookies}>
-              <PrivyProviders>
+              <StacksConnectionProvider>
                 <Navbar />
                 {children}
-              </PrivyProviders>
+              </StacksConnectionProvider>
             </ReownContextProvider>
           </MarketDataProvider>
         </AppStateProvider>

@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, createContext, useContext } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { usePrivy, useWallets } from "@privy-io/react-auth";
-import { useCreateWallet } from "@privy-io/react-auth/extended-chains";
-import { getAddressFromPublicKey } from "@stacks/transactions";
+import { connect, disconnect } from '@stacks/connect';
+import type { GetAddressesResult } from '@stacks/connect/dist/types/methods';
+import { useAtom } from 'jotai';
+import { stacksWalletAtom } from "@/state/stacks-wallet";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -30,40 +31,73 @@ export function ConnectButton({
   showModalOnMobile = true,
 }: ConnectButtonProps) {
   const { copy, isCopied } = useClipboard();
-  const { wallets } = useWallets();
-  const { ready, authenticated, login, logout, user, getAccessToken } =
-    usePrivy();
-  const { createWallet } = useCreateWallet();
-
-  const [walletId, setWalletId] = useState<string | null>(null);
-  const [testnetAddress, setTestnetAddress] = useState<string | null>(null);
   const [showWalletModal, setShowWalletModal] = useState(false);
+  const [walletState, setWalletState] = useAtom(stacksWalletAtom);
+  const [bns, setBns] = useState<string>('');
+
+  const { isConnected, address: testnetAddress } = walletState;
+
+  async function connectWallet() {
+    try {
+      let connectionResponse: GetAddressesResult = await connect();
+      const targetAddress = connectionResponse.addresses[2]?.address || connectionResponse.addresses[0]?.address;
+      
+      if (targetAddress) {
+        setWalletState({
+          isConnected: true,
+          address: targetAddress,
+          walletInfo: connectionResponse,
+        });
+        
+        await getBns(targetAddress);
+      }
+    } catch (error) {
+      console.error("Connection failed", error);
+    }
+  }
+
+  function disconnectWallet() {
+    disconnect();
+    setWalletState({
+      isConnected: false,
+      address: null,
+      walletInfo: null,
+    });
+    setBns('');
+    setShowWalletModal(false);
+  }
+  
+  async function getBns(stxAddress: string) {
+    try {
+      let response = await fetch(`https://api.bnsv2.com/testnet/names/address/${stxAddress}/valid`);
+      let data = await response.json();
+      if (data.names && data.names.length > 0) {
+        setBns(data.names[0].full_name);
+        return data.names[0].full_name;
+      }
+    } catch (e) {
+      console.error("Failed to get BNS", e);
+    }
+    return "";
+  }
 
   const handleCopy = async () => {
     if (!testnetAddress) return;
     await copy(testnetAddress);
   };
 
-  // Simplified wallet logic - update addresses when authenticated
-  React.useEffect(() => {
-    if (authenticated && wallets?.length > 0) {
-      const wallet = wallets[0];
-      if (wallet?.address) {
-        setWalletId(wallet.address);
-        setTestnetAddress(
-          getAddressFromPublicKey(wallet.address, "testnet") ?? null,
-        );
-      }
+  const handleWalletClick = () => {
+    if (showModalOnMobile) {
+      setShowWalletModal(true);
     } else {
-      setWalletId(null);
-      setTestnetAddress(null);
+      disconnectWallet();
     }
-  }, [authenticated, wallets]);
+  };
 
-  if (!ready || !authenticated) {
+  if (!isConnected) {
     return (
       <Button
-        onClick={login}
+        onClick={connectWallet}
         variant="outline"
         disabled={disabled}
         className={className}
@@ -74,14 +108,6 @@ export function ConnectButton({
     );
   }
 
-  const handleWalletClick = () => {
-    if (showModalOnMobile) {
-      setShowWalletModal(true);
-    } else {
-      logout();
-    }
-  };
-
   return (
     <>
       <Button
@@ -90,9 +116,9 @@ export function ConnectButton({
         disabled={disabled}
         className={`${className} text-center flex items-center gap-2`}
       >
-        {testnetAddress
+        {bns || (testnetAddress
           ? `${testnetAddress.slice(0, 6)}...${testnetAddress.slice(-4)}`
-          : "Wallet"}
+          : "Wallet")}
       </Button>
       <Dialog open={showWalletModal} onOpenChange={setShowWalletModal}>
         <DialogContent className="sm:max-w-md max-w-[90vw]">
@@ -104,7 +130,6 @@ export function ConnectButton({
               </span>
               {testnetAddress ? (
                 <div className="font-mono text-sm break-all text-center mt-4 flex items-center justify-center gap-2">
-                  {/* use turnicated for mobile */}
                   <span className="hidden md:block">{testnetAddress}</span>
                   <span className="md:hidden">
                     {`${testnetAddress.slice(0, 8)}...${testnetAddress.slice(-6)} `}
@@ -148,10 +173,7 @@ export function ConnectButton({
           <DialogFooter>
             <Button
               variant="destructive"
-              onClick={() => {
-                logout();
-                setShowWalletModal(false);
-              }}
+              onClick={disconnectWallet}
             >
               Disconnect
             </Button>
@@ -161,3 +183,82 @@ export function ConnectButton({
     </>
   );
 }
+
+interface StacksConnectionContextValue {
+  isConnected: boolean;
+  testnetAddress: string | null;
+  walletInfo: any;
+  bns: string;
+  connectWallet: () => Promise<void>;
+  disconnectWallet: () => Promise<void>;
+}
+
+const StacksConnectionContext = createContext<StacksConnectionContextValue | null>(null);
+
+// ✅ PROVIDER - Wrap your app or BridgeUI
+export const StacksConnectionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isConnected, setIsConnected] = useState(false);
+  const [testnetAddress, setTestnetAddress] = useState<string | null>(null);
+  const [walletInfo, setWalletInfo] = useState<any>(null);
+  const [bns, setBns] = useState('');
+
+  async function connectWallet() {
+    try {
+      let connectionResponse: GetAddressesResult = await connect();
+      const targetAddress = connectionResponse.addresses[2]?.address || connectionResponse.addresses[0]?.address;
+
+      if (targetAddress) {
+        setIsConnected(true);
+        setWalletInfo(connectionResponse);
+        setTestnetAddress(targetAddress);
+        const bnsName = await getBns(targetAddress);
+        setBns(bnsName);
+      }
+    } catch (error) {
+      console.error("Connection failed", error);
+    }
+  }
+
+  async function disconnectWallet() {
+    disconnect();
+    setIsConnected(false);
+    setWalletInfo(null);
+    setTestnetAddress(null);
+    setBns('');
+  }
+
+  async function getBns(stxAddress: string) {
+    try {
+      let response = await fetch(`https://api.bnsv2.com/testnet/names/address/${stxAddress}/valid`);
+      let data = await response.json();
+      if (data.names && data.names.length > 0) {
+        return data.names[0].full_name;
+      }
+    } catch (e) {
+      console.error("Failed to get BNS", e);
+    }
+    return "";
+  }
+
+  return (
+    <StacksConnectionContext.Provider value={{
+      isConnected,
+      testnetAddress,
+      walletInfo,
+      bns,
+      connectWallet,
+      disconnectWallet,
+    }}>
+      {children}
+    </StacksConnectionContext.Provider>
+  );
+};
+
+// ✅ HOOK - Use in BridgeUI
+export const useStacksConnection = () => {
+  const context = useContext(StacksConnectionContext);
+  if (!context) {
+    throw new Error('useStacksConnection must be used within StacksConnectionProvider');
+  }
+  return context;
+};
