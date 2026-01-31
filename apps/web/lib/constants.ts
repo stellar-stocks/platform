@@ -16,7 +16,42 @@ export type Stock = {
   realTimeChange?: number;
 };
 
+
+// add btc, eth, sol
 export const stocks: Stock[] = [
+  {
+    name: "Bitcoin",
+    icon: "bitcoin.png",
+    symbol: "BTC",
+    price: "83,389.34",
+    change: "+1.5%",
+    vol: "1.2B",
+    marketCap: "600B",
+    contractAddress: "0x...",
+    leverage: "10x",
+  },
+  {
+    name: "Ethereum",
+    icon: "ethereum.svg",
+    symbol: "ETH",
+    price: "2,842.23",
+    change: "+2.0%",
+    vol: "900M",
+    marketCap: "400B",
+    contractAddress: "0x...",
+    leverage: "20x",
+  },
+  {
+    name: "Solana",
+    icon: "solana.png",
+    symbol: "SOL",
+    price: "136.50",
+    change: "+3.5%",
+    vol: "300M",
+    marketCap: "100B",
+    contractAddress: "0x...",
+    leverage: "15x",
+  },
   {
     name: "Nvidia Corp.",
     icon: "nvidia.svg",

@@ -7,7 +7,7 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import { usePrivy } from "@privy-io/react-auth";
+import { useStacksWallet } from "@/hooks/use-stacks-wallet";
 import { Button, buttonVariants } from "./ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { AnimatePresence, motion } from "motion/react";
@@ -16,7 +16,8 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 const OrderPanel: React.FC = () => {
-  const [balance, setBalance] = useState<number>(1000);
+  const { address, isConnected } = useStacksWallet();
+  const [balance, setBalance] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(0);
   const [limitPrice, setLimitPrice] = useState<string>("3348.33");
   const [side, setSide] = useState<"buy" | "sell">("buy");
@@ -27,21 +28,71 @@ const OrderPanel: React.FC = () => {
   const [verificationUrl, setVerificationUrl] = useState<string>("");
   const [isKYCVerified, setIsKYCVerified] = useState<boolean>(false);
 
-  const { user } = usePrivy();
-
   // Slider constants
   const TICKS = [0, 25, 50, 75, 100];
   const SNAP_THRESHOLD = 3;
   const min = 0;
   const max = 100;
 
+  useEffect(() => {
+    const fetchBalance = async () => {
+      if (!address) {
+        setBalance(0);
+        return;
+      }
+
+      // Determine network based on address prefix
+      // ST... is testnet, SP... (or others) is mainnet
+      const isTestnet = address.startsWith("ST") || address.startsWith("SN");
+      const baseUrl = isTestnet
+        ? "https://api.testnet.hiro.so"
+        : "https://api.hiro.so";
+
+      try {
+        const response = await fetch(
+          `${baseUrl}/extended/v1/address/${address}/balances`
+        );
+        const data = await response.json();
+        
+        console.log("Wallet Balance Data:", data);
+
+        // Targeted Token Identifier
+        // On testnet, we use the mock USDCx
+        // On mainnet, we should ideally look for the real USDC or similar, but for now let's stick to the request context
+        const usdcxKey = "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.usdcx::usdcx";
+        
+        // Check for specific token first
+        let amount = 0;
+        if (data.fungible_tokens && data.fungible_tokens[usdcxKey]) {
+          amount = Number(data.fungible_tokens[usdcxKey].balance);
+        } else {
+             // Fallback: Check for ANY token that looks like USDC if the specific one isn't found
+            // This is helpful if the user deployed their own mock
+             const foundToken = Object.keys(data.fungible_tokens || {}).find(key => key.toLowerCase().includes("usdc"));
+             if (foundToken) {
+                 amount = Number(data.fungible_tokens[foundToken].balance);
+             }
+        }
+
+        // Divide by decimals (6 for USDC)
+        setBalance(amount / 1000000);
+
+      } catch (error) {
+        console.error("Failed to fetch balance:", error);
+        setBalance(0);
+      }
+    };
+
+    fetchBalance();
+  }, [address]);
+
   // Fetch KYC status on mount or when user changes
   useEffect(() => {
     const fetchKYC = async () => {
-      if (!user?.wallet?.address) return;
+      if (!address) return;
       try {
         const res = await fetch(
-          `/api/user?walletId=${encodeURIComponent(user.wallet.address)}`,
+          `/api/user?walletId=${encodeURIComponent(address)}`,
         );
         const data = await res.json();
         setIsKYCVerified(!!data.isKYCVerified);
@@ -50,7 +101,7 @@ const OrderPanel: React.FC = () => {
       }
     };
     fetchKYC();
-  }, [user?.wallet?.address]);
+  }, [address]);
 
   const getVerificationUrl = async () => {
     setIsLoading(true);
@@ -60,7 +111,7 @@ const OrderPanel: React.FC = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           isIframe: false,
-          vendor_data: user?.wallet?.address || "",
+          vendor_data: address || "",
         }),
       });
       const data = await res.json();
@@ -76,7 +127,7 @@ const OrderPanel: React.FC = () => {
   };
 
   const handleOrder = async () => {
-    if (!user?.wallet?.address) {
+    if (!isConnected || !address) {
       alert("Please connect your wallet first");
       return;
     }
@@ -90,14 +141,13 @@ const OrderPanel: React.FC = () => {
     console.log("Order placed:", { side, orderType, quantity, limitPrice });
   };
 
-  // Update quantity based on percentage (you can adjust the balance calculation)
+  // Update quantity based on percentage
   const updateQuantityFromPercentage = useCallback((percent: number) => {
-    // Example: Assuming max balance is 1000 units
-    const maxBalance = 1000;
-    const newQuantity = Math.floor((percent / 100) * maxBalance);
+    // efficient calculation using current balance
+    const newQuantity = Math.floor((percent / 100) * balance);
     setQuantity(newQuantity);
     setPercentage(percent);
-  }, []);
+  }, [balance]);
 
   // Specific colors for the variant
   const colors = useMemo(() => {
