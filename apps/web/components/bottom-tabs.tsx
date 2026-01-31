@@ -4,6 +4,8 @@ import { motion } from "motion/react";
 import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { ChevronDown } from "lucide-react";
+import { OpenOrdersTable } from "./table/open-orders";
+import { TradeHistoryTable } from "./table/trade-history";
 
 interface BottomTabsProps {
   isCollapsed: boolean;
@@ -16,9 +18,9 @@ const BottomTabs: React.FC<BottomTabsProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState("Open orders");
   const tabs = [
-    { name: "Assets", count: 0 },
-    { name: "Open orders", count: 0 },
-    { name: "Order history", count: null },
+    { name: "Assets", count: 0, component: null },
+    { name: "Open orders", count: 0, component: OpenOrdersTable },
+    { name: "Order history", count: null, component: TradeHistoryTable },
   ];
 
   return (
@@ -73,25 +75,10 @@ const BottomTabs: React.FC<BottomTabsProps> = ({
         </button>
       </div>
 
-      {/* Content Area */}
-      {!isCollapsed && (
-        <>
-          <Button variant="ghost" size="icon" className="font-medium">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              className="opacity-20"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-              <line x1="3" y1="9" x2="21" y2="9" />
-              <line x1="9" y1="21" x2="9" y2="9" />
-            </svg>
-          </Button>
-        </>
+      { !isCollapsed && activeTab !== "Assets" && (
+        <div className="p-4 overflow-auto flex-1">
+          {tabs.find(tab => tab.name === activeTab)?.component && React.createElement(tabs.find(tab => tab.name === activeTab)!.component!)}
+        </div>
       )}
     </div>
   );
