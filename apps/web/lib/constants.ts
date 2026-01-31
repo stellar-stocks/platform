@@ -14,8 +14,9 @@ export type Stock = {
   leverage: string;
   realTimePrice?: number;
   realTimeChange?: number;
+  assetType?: "stock" | "crypto";
+  marketType?: "perpetual" | "spot";
 };
-
 
 // add btc, eth, sol
 export const stocks: Stock[] = [
@@ -29,6 +30,8 @@ export const stocks: Stock[] = [
     marketCap: "600B",
     contractAddress: "0x...",
     leverage: "10x",
+    assetType: "crypto",
+    marketType: "perpetual",
   },
   {
     name: "Ethereum",
@@ -40,6 +43,8 @@ export const stocks: Stock[] = [
     marketCap: "400B",
     contractAddress: "0x...",
     leverage: "20x",
+    assetType: "crypto",
+    marketType: "perpetual",
   },
   {
     name: "Solana",
@@ -51,6 +56,8 @@ export const stocks: Stock[] = [
     marketCap: "100B",
     contractAddress: "0x...",
     leverage: "15x",
+    assetType: "crypto",
+    marketType: "perpetual",
   },
   {
     name: "Nvidia Corp.",
@@ -62,6 +69,8 @@ export const stocks: Stock[] = [
     marketCap: "1.2T",
     contractAddress: "0x...",
     leverage: "50x",
+    assetType: "stock",
+    marketType: "perpetual",
   },
   {
     name: "Tesla, Inc.",
@@ -73,6 +82,8 @@ export const stocks: Stock[] = [
     marketCap: "800B",
     contractAddress: "0x...",
     leverage: "5x",
+    assetType: "stock",
+    marketType: "perpetual",
   },
   {
     name: "Microsoft",
@@ -84,6 +95,8 @@ export const stocks: Stock[] = [
     marketCap: "3.5T",
     contractAddress: "0x...",
     leverage: "50x",
+    assetType: "stock",
+    marketType: "perpetual",
   },
   {
     name: "Amazon.com",
@@ -95,6 +108,8 @@ export const stocks: Stock[] = [
     marketCap: "1.5T",
     contractAddress: "0x...",
     leverage: "50x",
+    assetType: "stock",
+    marketType: "perpetual",
   },
   {
     name: "Meta Platforms",
@@ -104,8 +119,11 @@ export const stocks: Stock[] = [
     change: "-0.85%",
     vol: "14.2M",
     marketCap: "1.2T",
+
     contractAddress: "0x...",
     leverage: "50x",
+    assetType: "stock",
+    marketType: "perpetual",
   },
 ];
 

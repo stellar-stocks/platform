@@ -1,5 +1,6 @@
 import { ChevronDown } from "lucide-react";
 import React from "react";
+import { stocks } from "@/lib/constants";
 
 interface MobileAssetHeaderProps {
   symbol: string;
@@ -13,6 +14,10 @@ const MobileAssetHeader: React.FC<MobileAssetHeaderProps> = ({
   onClick,
 }) => {
   const ticker = symbol.split(":").pop() || symbol;
+  const selectedAsset = stocks.find((stock) => stock.symbol === ticker);
+  const price = stocks.find((stock) => stock.symbol === ticker)?.price || "$0.00";
+  const change =
+    stocks.find((stock) => stock.symbol === ticker)?.change || "+0.00%"; 
 
   return (
     <div
@@ -33,19 +38,21 @@ const MobileAssetHeader: React.FC<MobileAssetHeaderProps> = ({
               <span className="text-lg font-bold tracking-tight text-[#eaecef]">
                 {ticker}
               </span>
-              <span className="text-[9px] px-2 py-0.5 bg-[#1e2329] border border-[#2b2f36] rounded-md font-bold text-[#848e9c] uppercase tracking-widest">
+              {selectedAsset?.marketType === "perpetual" &&
+                <span className="text-[9px] px-2 py-0.5 bg-[#1e2329] border border-[#2b2f36] rounded-md font-bold text-[#848e9c] uppercase tracking-widest">
                 PERP
-              </span>
+              </span>}
             </div>
-            <div className="text-[10px] text-[#848e9c] font-medium">
+            {selectedAsset?.assetType === "stock" &&
+              <div className="text-[10px] text-[#848e9c] font-medium">
               Nasdaq Global Select
-            </div>
+            </div>}
           </div>
         </div>
       </div>
 
       <div className="flex flex-col items-end justify-center">
-        <div className="text-lg font-bold text-[#2ebd85]">$228.24</div>
+        <div className="text-lg font-bold text-[#2ebd85]">${price}</div>
         <div className="text-[11px] text-[#2ebd85] font-bold flex items-center gap-1">
           <svg
             width="10"
@@ -57,7 +64,7 @@ const MobileAssetHeader: React.FC<MobileAssetHeaderProps> = ({
           >
             <polyline points="18 15 12 9 6 15" />
           </svg>
-          +1.10%
+          {change}
         </div>
       </div>
     </div>
