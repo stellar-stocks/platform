@@ -87,7 +87,7 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          {/* Bottom Panel - Fixed Toggle */}
+          {/* Bottom Panel - Fixed Toggle 
           <div
             className={`transition-all duration-300 ease-in-out border-t border-[#2b2f36] bg-[#0b0e11] relative z-20 ${
               isBottomPanelCollapsed ? "h-[32px]" : "flex-1 min-h-[230px]"
@@ -100,6 +100,7 @@ const App: React.FC = () => {
               }
             />
           </div>
+          */}
         </div>
 
         {/* Mobile Floating Action ButtonHigher z-index */}
@@ -149,7 +150,7 @@ const App: React.FC = () => {
                 <TradingViewChart selectedStock={selectedStock} />
               </div>
             </div>
-            <div
+            {/* <div
               className={`transition-all duration-300 ease-in-out border-t border-[#2b2f36] bg-[#0b0e11] ${
                 isBottomPanelCollapsed ? "h-[32px]" : "flex-1 h-[230px]"
               }`}
@@ -160,7 +161,7 @@ const App: React.FC = () => {
                   setIsBottomPanelCollapsed(!isBottomPanelCollapsed)
                 }
               />
-            </div>
+            </div> */}
           </div>
         </main>
         <aside className="w-[320px] hidden lg:flex flex-col bg-[#0b0e11]">
